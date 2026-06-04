@@ -1,0 +1,17 @@
+{
+    "name": "phpresponses/phpresponses",
+    "description": "A web framework in php that respect oop",
+    "autoload": {
+        "psr-4": {
+            "PhpResponses\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpResponses\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    }
+}

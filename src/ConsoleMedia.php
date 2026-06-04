@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace PhpResponses;
+
+final class ConsoleMedia implements Media
+{
+    public function status(int $code, string $message): Media
+    {
+        echo "Status: {$code} {$message}\n";
+        return new self();
+    }
+
+    public function header(string $name, string $value): Media
+    {
+        echo "{$name}: {$value}\n";
+        return new self();
+    }
+
+    public function body(string $content): Media
+    {
+        echo "\n{$content}";
+        return new self();
+    }
+}
