@@ -1,6 +1,12 @@
 # PhpResponses
 
-A web framework in PHP that respects OOP fully, following the principles of "Elegant Objects" by Yegor Bugayenko.
+A simple web framework in PHP that respects OOP.
+
+Inspired by pure OOP, Alan Kay with [Smalltalk](https://en.wikipedia.org/wiki/Smalltalk), and Yegor Bugayenko's [Cactoos](https://github.com/yegor256/cactoos), [Takes](https://github.com/yegor256/takes), and [JPages](https://github.com/yegor256/jpages).
+
+I’ve also created the web framework in other languages that you can check out.
+- [Java](https://github.com/schillermann/jresponses)
+- [JavaScript](https://github.com/schillermann/jsresponses)
 
 ## Core Principles
 - **Strictly OOP**: No getters, no setters, no nulls.
