@@ -82,7 +82,11 @@ Now just open this file in your browser via a web server (like `php -S localhost
 
 ## JSON Request Example
 
-You can also parse JSON requests:
+You can parse JSON requests declaratively using templates.
+
+### Inline Template Example
+
+If you want to render the response using an in-memory template string:
 
 ```php
 <?php
@@ -97,19 +101,72 @@ use PhpResponses\MediaToWire;
 use PhpResponses\JsonSubTree;
 use PhpResponses\JsonString;
 use PhpResponses\JsonInt;
-
-$body = new BodyFromEnv();
-$userNode = new JsonSubTree($body, 'user');
-$name = new JsonString($userNode, 'name');
-$age  = new JsonInt($userNode, 'age');
+use PhpResponses\Template;
+use PhpResponses\LiteralText;
+use PhpResponses\TextOfNumber;
 
 (new ResponseStatusLineOk(
     new ResponseHeader(
         new ResponseBody(
-            sprintf(
-                "<html><body><h1>Hello, %s!</h1><p>You are %d years old.</p></body></html>",
-                $name->string(),
-                $age->int()
+            new Template(
+                new LiteralText("<html><body><h1>Hello, ${name}!</h1><p>You are ${age} years old.</p></body></html>"),
+                [
+                    "name" => new JsonString(
+                        new JsonSubTree(new BodyFromEnv(), 'user'),
+                        'name'
+                    ),
+                    "age" => new TextOfNumber(
+                        new JsonInt(
+                            new JsonSubTree(new BodyFromEnv(), 'user'),
+                            'age'
+                        )
+                    )
+                ]
+            )
+        ),
+        "Content-Type", "text/html"
+    )
+))->media(new MediaToWire());
+```
+
+### External Template Example
+
+If you prefer to separate layout from logic by keeping the HTML structure in an external file (e.g., `template.html`):
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use PhpResponses\Request\BodyFromEnv;
+use PhpResponses\ResponseStatusLineOk;
+use PhpResponses\ResponseHeader;
+use PhpResponses\ResponseBody;
+use PhpResponses\MediaToWire;
+use PhpResponses\JsonSubTree;
+use PhpResponses\JsonString;
+use PhpResponses\JsonInt;
+use PhpResponses\Template;
+use PhpResponses\TextOfFile;
+use PhpResponses\TextOfNumber;
+
+(new ResponseStatusLineOk(
+    new ResponseHeader(
+        new ResponseBody(
+            new Template(
+                new TextOfFile("template.html"),
+                [
+                    "name" => new JsonString(
+                        new JsonSubTree(new BodyFromEnv(), 'user'),
+                        'name'
+                    ),
+                    "age" => new TextOfNumber(
+                        new JsonInt(
+                            new JsonSubTree(new BodyFromEnv(), 'user'),
+                            'age'
+                        )
+                    )
+                ]
             )
         ),
         "Content-Type", "text/html"
