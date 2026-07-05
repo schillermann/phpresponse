@@ -37,7 +37,7 @@ use PhpResponses\MediaToWire;
 
 ## Request Example
 
-You can also use classes from `PhpResponses\Request` to extract data from the request environment:
+You can also use classes from `PhpResponses\Request` and compose request parsing declaratively using templates:
 
 ```php
 <?php
@@ -52,25 +52,24 @@ use PhpResponses\ResponseStatusLineOk;
 use PhpResponses\ResponseHeader;
 use PhpResponses\ResponseBody;
 use PhpResponses\MediaToWire;
-
-try {
-    $agent = (new HeaderFromEnv("User-Agent"))->string();
-} catch (\OutOfBoundsException $e) {
-    $agent = "Unknown";
-}
-$body = (new BodyFromEnv())->string();
-$method = (new MethodFromEnv())->string();
-$path = (new PathFromEnv())->string();
+use PhpResponses\Template;
+use PhpResponses\LiteralText;
+use PhpResponses\FallbackText;
 
 (new ResponseStatusLineOk(
     new ResponseHeader(
         new ResponseBody(
-            sprintf(
-                "<html><body><h1>Your Browser: %s</h1><p>Method: %s</p><p>Path: %s</p><p>Body: %s</p></body></html>",
-                $agent,
-                $method,
-                $path,
-                $body
+            new Template(
+                new LiteralText("<html><body><h1>Your Browser: ${agent}</h1><p>Method: ${method}</p><p>Path: ${path}</p><p>Body: ${body}</p></body></html>"),
+                [
+                    "agent" => new FallbackText(
+                        new HeaderFromEnv("User-Agent"),
+                        new LiteralText("Unknown")
+                    ),
+                    "method" => new MethodFromEnv(),
+                    "path" => new PathFromEnv(),
+                    "body" => new BodyFromEnv()
+                ]
             )
         ),
         "Content-Type", "text/html"
