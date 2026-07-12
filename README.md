@@ -250,3 +250,29 @@ use PhpResponse\TextOfFile;
     )
 ))->media(new MediaToWire());
 ```
+
+## Caching and Performance with StickyText
+
+In true Object-Oriented Programming, objects must be small and cohesive. An object representing the request body, like `BodyFromEnv`, should only do one thing: read the request body from the environment. It must not concern itself with caching or memoization. Adding caching logic directly to it would make the object stateful, complex, and bloated—violating the Single Responsibility Principle.
+
+Instead of introducing state into environment-interacting objects, we use decorators.
+
+`StickyText` is a decorator that caches (memoizes) the text returned by another `Text` object. You should use `StickyText` whenever reading the original `Text` has side effects or a high performance cost (e.g., repeatedly reading streams, querying files, or calling external APIs).
+
+### Example
+
+Instead of reading the raw environment stream multiple times, wrap `BodyFromEnv` with `StickyText`:
+
+```php
+use PhpResponse\Request\BodyFromEnv;
+use PhpResponse\StickyText;
+
+// The request body is read only once upon the first call to string()
+$body = new StickyText(new BodyFromEnv());
+
+// First call: reads from stream and caches the result
+$content = $body->string();
+
+// Second call: retrieves from memory instantly
+$contentAgain = $body->string();
+```
