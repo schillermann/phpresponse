@@ -6,7 +6,7 @@ namespace PhpResponse\Request;
 
 use PhpResponse\Text;
 
-final class HeaderFromEnv implements Text {
+final class Header implements Text {
     
     private string $name;
 

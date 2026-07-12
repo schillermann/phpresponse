@@ -47,10 +47,10 @@ use PhpResponse\Text;
 use PhpResponse\TemplateVariable;
 use PhpResponse\LiteralText;
 use PhpResponse\FallbackText;
-use PhpResponse\Request\HeaderFromEnv;
-use PhpResponse\Request\MethodFromEnv;
-use PhpResponse\Request\PathFromEnv;
-use PhpResponse\Request\BodyFromEnv;
+use PhpResponse\Request\Header;
+use PhpResponse\Request\Method;
+use PhpResponse\Request\Path;
+use PhpResponse\Request\Body;
 
 final class RequestDetailsText implements Text {
     public function string(): string {
@@ -61,18 +61,18 @@ final class RequestDetailsText implements Text {
                         new LiteralText("<html><body><h1>Your Browser: ${agent}</h1><p>Method: ${method}</p><p>Path: ${path}</p><p>Body: ${body}</p></body></html>"),
                         "agent",
                         new FallbackText(
-                            new HeaderFromEnv("User-Agent"),
+                            new Header("User-Agent"),
                             new LiteralText("Unknown")
                         )
                     ),
                     "method",
-                    new MethodFromEnv()
+                    new Method()
                 ),
                 "path",
-                new PathFromEnv()
+                new Path()
             ),
             "body",
-            new BodyFromEnv()
+            new Body()
         ))->string();
     }
 }
@@ -149,7 +149,7 @@ Now, pass this view to `ResponseBody`:
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PhpResponse\Request\BodyFromEnv;
+use PhpResponse\Request\Body;
 use PhpResponse\ResponseStatusLineOk;
 use PhpResponse\ResponseHeader;
 use PhpResponse\ResponseBody;
@@ -163,11 +163,11 @@ use PhpResponse\JsonInt;
         new ResponseBody(
             new UserWelcomeText(
                 new JsonString(
-                    new JsonSubTree(new BodyFromEnv(), 'user'),
+                    new JsonSubTree(new Body(), 'user'),
                     'name'
                 ),
                 new JsonInt(
-                    new JsonSubTree(new BodyFromEnv(), 'user'),
+                    new JsonSubTree(new Body(), 'user'),
                     'age'
                 )
             )
@@ -221,7 +221,7 @@ Because `UserProfileText` implements the `Text` interface, it is fully compatibl
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PhpResponse\Request\BodyFromEnv;
+use PhpResponse\Request\Body;
 use PhpResponse\ResponseStatusLineOk;
 use PhpResponse\ResponseHeader;
 use PhpResponse\ResponseBody;
@@ -237,11 +237,11 @@ use PhpResponse\TextOfFile;
             new UserProfileText(
                 new TextOfFile("template.html"),
                 new JsonString(
-                    new JsonSubTree(new BodyFromEnv(), 'user'),
+                    new JsonSubTree(new Body(), 'user'),
                     'name'
                 ),
                 new JsonInt(
-                    new JsonSubTree(new BodyFromEnv(), 'user'),
+                    new JsonSubTree(new Body(), 'user'),
                     'age'
                 )
             )
@@ -253,7 +253,7 @@ use PhpResponse\TextOfFile;
 
 ## Caching and Performance with StickyText
 
-In true Object-Oriented Programming, objects must be small and cohesive. An object representing the request body, like `BodyFromEnv`, should only do one thing: read the request body from the environment. It must not concern itself with caching or memoization. Adding caching logic directly to it would make the object stateful, complex, and bloated—violating the Single Responsibility Principle.
+In true Object-Oriented Programming, objects must be small and cohesive. An object representing the request body, like `Body`, should only do one thing: read the request body from the input stream. It must not concern itself with caching or memoization. Adding caching logic directly to it would make the object stateful, complex, and bloated—violating the Single Responsibility Principle.
 
 Instead of introducing state into environment-interacting objects, we use decorators.
 
@@ -261,14 +261,14 @@ Instead of introducing state into environment-interacting objects, we use decora
 
 ### Example
 
-Instead of reading the raw environment stream multiple times, wrap `BodyFromEnv` with `StickyText`:
+Instead of reading the raw input stream multiple times, wrap `Body` with `StickyText`:
 
 ```php
-use PhpResponse\Request\BodyFromEnv;
+use PhpResponse\Request\Body;
 use PhpResponse\StickyText;
 
 // The request body is read only once upon the first call to string()
-$body = new StickyText(new BodyFromEnv());
+$body = new StickyText(new Body());
 
 // First call: reads from stream and caches the result
 $content = $body->string();

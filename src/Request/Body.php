@@ -7,7 +7,7 @@ namespace PhpResponse\Request;
 use PhpResponse\BodyReadException;
 use PhpResponse\Text;
 
-final class BodyFromEnv implements Text {
+final class Body implements Text {
     
     public function string(): string {
         $body = file_get_contents('php://input');

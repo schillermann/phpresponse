@@ -6,7 +6,7 @@ namespace PhpResponse\Request;
 
 use PhpResponse\Text;
 
-final class QueryParamFromEnv implements Text {
+final class QueryParam implements Text {
     
     private string $key;
 

@@ -6,7 +6,7 @@ namespace PhpResponse\Request;
 
 use PhpResponse\Text;
 
-final class PathFromEnv implements Text {
+final class Path implements Text {
     
     public function string(): string {
         if (!isset($_SERVER['REQUEST_URI'])) {

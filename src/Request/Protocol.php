@@ -6,8 +6,8 @@ namespace PhpResponse\Request;
 
 use PhpResponse\Text;
 
-final class MethodFromEnv implements Text {
+final class Protocol implements Text {
     public function string(): string {
-        return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        return $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1';
     }
 }

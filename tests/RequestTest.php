@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace PhpResponse;
 
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Request\BodyFromEnv;
-use PhpResponse\Request\HeaderFromEnv;
-use PhpResponse\Request\MethodFromEnv;
-use PhpResponse\Request\PathFromEnv;
-use PhpResponse\Request\ProtocolFromEnv;
-use PhpResponse\Request\QueryParamFromEnv;
+use PhpResponse\Request\Body;
+use PhpResponse\Request\Header;
+use PhpResponse\Request\Method;
+use PhpResponse\Request\Path;
+use PhpResponse\Request\Protocol;
+use PhpResponse\Request\QueryParam;
 
 final class RequestTest extends TestCase
 {
@@ -22,68 +22,68 @@ final class RequestTest extends TestCase
         $_GET = [];
     }
 
-    public function testHeaderFromEnv(): void
+    public function testHeader(): void
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0';
         $_SERVER['CONTENT_TYPE'] = 'application/json';
 
-        $this->assertEquals('Mozilla/5.0', (new HeaderFromEnv('User-Agent'))->string());
-        $this->assertEquals('application/json', (new HeaderFromEnv('Content-Type'))->string());
+        $this->assertEquals('Mozilla/5.0', (new Header('User-Agent'))->string());
+        $this->assertEquals('application/json', (new Header('Content-Type'))->string());
     }
 
-    public function testHeaderFromEnvThrowsExceptionWhenMissing(): void
+    public function testHeaderThrowsExceptionWhenMissing(): void
     {
         $this->expectException(\OutOfBoundsException::class);
-        (new HeaderFromEnv('User-Agent'))->string();
+        (new Header('User-Agent'))->string();
     }
 
-    public function testMethodFromEnv(): void
+    public function testMethod(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->assertEquals('POST', (new MethodFromEnv())->string());
+        $this->assertEquals('POST', (new Method())->string());
     }
 
-    public function testMethodFromEnvDefaultsToGet(): void
+    public function testMethodDefaultsToGet(): void
     {
-        $this->assertEquals('GET', (new MethodFromEnv())->string());
+        $this->assertEquals('GET', (new Method())->string());
     }
 
-    public function testPathFromEnv(): void
+    public function testPath(): void
     {
         $_SERVER['REQUEST_URI'] = '/some/path?query=1';
-        $this->assertEquals('/some/path', (new PathFromEnv())->string());
+        $this->assertEquals('/some/path', (new Path())->string());
     }
 
-    public function testPathFromEnvDefaultsToSlash(): void
+    public function testPathDefaultsToSlash(): void
     {
-        $this->assertEquals('/', (new PathFromEnv())->string());
+        $this->assertEquals('/', (new Path())->string());
     }
 
-    public function testProtocolFromEnv(): void
+    public function testProtocol(): void
     {
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/2.0';
-        $this->assertEquals('HTTP/2.0', (new ProtocolFromEnv())->string());
+        $this->assertEquals('HTTP/2.0', (new Protocol())->string());
     }
 
-    public function testProtocolFromEnvDefaults(): void
+    public function testProtocolDefaults(): void
     {
-        $this->assertEquals('HTTP/1.1', (new ProtocolFromEnv())->string());
+        $this->assertEquals('HTTP/1.1', (new Protocol())->string());
     }
 
-    public function testQueryParamFromEnv(): void
+    public function testQueryParam(): void
     {
-        $_GET['name'] = 'yegor';
-        $this->assertEquals('yegor', (new QueryParamFromEnv('name'))->string());
+        $_GET['name'] = 'mario';
+        $this->assertEquals('mario', (new QueryParam('name'))->string());
     }
 
-    public function testQueryParamFromEnvThrowsExceptionWhenMissing(): void
+    public function testQueryParamThrowsExceptionWhenMissing(): void
     {
         $this->expectException(\OutOfBoundsException::class);
-        (new QueryParamFromEnv('name'))->string();
+        (new QueryParam('name'))->string();
     }
 
-    public function testBodyFromEnv(): void
+    public function testBody(): void
     {
-        $this->assertIsString((new BodyFromEnv())->string());
+        $this->assertIsString((new Body())->string());
     }
 }
