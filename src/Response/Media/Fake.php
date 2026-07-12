@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response\Media;
 
-final class FakeMedia implements Media
+use PhpResponse\Response\Media;
+use PhpResponse\Text;
+
+final class Fake implements Media
 {
     private array $log;
 

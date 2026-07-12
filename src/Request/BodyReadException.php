@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Request;
 
 final class BodyReadException extends \Exception
 {

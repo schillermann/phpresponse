@@ -2,25 +2,28 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response\Media;
 
-final class MediaToConsole implements Media
+use PhpResponse\Response\Media;
+use PhpResponse\Text;
+
+final class Wire implements Media
 {
     public function status(int $code, string $message): Media
     {
-        echo "Status: {$code} {$message}\n";
+        http_response_code($code);
         return new self();
     }
 
     public function header(string $name, string $value): Media
     {
-        echo "{$name}: {$value}\n";
+        header("{$name}: {$value}");
         return new self();
     }
 
     public function body(Text $content): Media
     {
-        echo "\n{$content->string()}";
+        echo $content->string();
         return new self();
     }
 }

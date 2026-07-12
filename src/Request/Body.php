@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpResponse\Request;
 
-use PhpResponse\BodyReadException;
 use PhpResponse\Text;
 
 final class Body implements Text {

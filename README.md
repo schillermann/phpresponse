@@ -22,18 +22,18 @@ Create an `index.php` and use decorators to compose your response:
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PhpResponse\ResponseBody;
-use PhpResponse\ResponseHeader;
-use PhpResponse\ResponseStatusLineOk;
-use PhpResponse\MediaToWire;
+use PhpResponse\Response\Body;
+use PhpResponse\Response\Header;
+use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\Media\Wire;
 use PhpResponse\LiteralText;
 
-(new ResponseStatusLineOk(
-    new ResponseHeader(
-        new ResponseBody(new LiteralText("<h1>Hello from PhpResponse!</h1>")),
+(new Ok(
+    new Header(
+        new Body(new LiteralText("<h1>Hello from PhpResponse!</h1>")),
         "Content-Type", "text/html"
     )
-))->media(new MediaToWire());
+))->media(new Wire());
 ```
 
 ## Request Example
@@ -85,19 +85,19 @@ Now, compose the response cleanly:
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PhpResponse\ResponseStatusLineOk;
-use PhpResponse\ResponseHeader;
-use PhpResponse\ResponseBody;
-use PhpResponse\MediaToWire;
+use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\Header;
+use PhpResponse\Response\Body;
+use PhpResponse\Response\Media\Wire;
 
-(new ResponseStatusLineOk(
-    new ResponseHeader(
-        new ResponseBody(
+(new Ok(
+    new Header(
+        new Body(
             new RequestDetailsText()
         ),
         "Content-Type", "text/html"
     )
-))->media(new MediaToWire());
+))->media(new Wire());
 ```
 
 Now just open this file in your browser via a web server (like `php -S localhost:8000`).
@@ -142,7 +142,7 @@ final class UserWelcomeText implements Text {
 }
 ```
 
-Now, pass this view to `ResponseBody`:
+Now, pass this view to `Body`:
 
 ```php
 <?php
@@ -150,16 +150,16 @@ Now, pass this view to `ResponseBody`:
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpResponse\Request\Body;
-use PhpResponse\ResponseStatusLineOk;
-use PhpResponse\ResponseHeader;
-use PhpResponse\ResponseBody;
-use PhpResponse\MediaToWire;
+use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\Header;
+use PhpResponse\Response\Body as ResponseBody;
+use PhpResponse\Response\Media\Wire;
 use PhpResponse\JsonSubTree;
 use PhpResponse\JsonString;
 use PhpResponse\JsonInt;
 
-(new ResponseStatusLineOk(
-    new ResponseHeader(
+(new Ok(
+    new Header(
         new ResponseBody(
             new UserWelcomeText(
                 new JsonString(
@@ -174,7 +174,7 @@ use PhpResponse\JsonInt;
         ),
         "Content-Type", "text/html"
     )
-))->media(new MediaToWire());
+))->media(new Wire());
 ```
 
 ### Encapsulated Template Example
@@ -214,7 +214,7 @@ final class UserProfileText implements Text {
 }
 ```
 
-Because `UserProfileText` implements the `Text` interface, it is fully compatible with the response decorator tree. You can pass it as a drop-in argument directly to `ResponseBody`, which is then wrapped by `ResponseHeader` and `ResponseStatusLineOk`:
+Because `UserProfileText` implements the `Text` interface, it is fully compatible with the response decorator tree. You can pass it as a drop-in argument directly to `Body`, which is then wrapped by `Header` and `StatusLine\Ok`:
 
 ```php
 <?php
@@ -222,17 +222,17 @@ Because `UserProfileText` implements the `Text` interface, it is fully compatibl
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpResponse\Request\Body;
-use PhpResponse\ResponseStatusLineOk;
-use PhpResponse\ResponseHeader;
-use PhpResponse\ResponseBody;
-use PhpResponse\MediaToWire;
+use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\Header;
+use PhpResponse\Response\Body as ResponseBody;
+use PhpResponse\Response\Media\Wire;
 use PhpResponse\JsonSubTree;
 use PhpResponse\JsonString;
 use PhpResponse\JsonInt;
 use PhpResponse\TextOfFile;
 
-(new ResponseStatusLineOk(
-    new ResponseHeader(
+(new Ok(
+    new Header(
         new ResponseBody(
             new UserProfileText(
                 new TextOfFile("template.html"),
@@ -248,7 +248,7 @@ use PhpResponse\TextOfFile;
         ),
         "Content-Type", "text/html"
     )
-))->media(new MediaToWire());
+))->media(new Wire());
 ```
 
 ## Caching and Performance with StickyText

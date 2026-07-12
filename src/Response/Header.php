@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response;
 
-final class ResponseHeader implements Response
+final class Header implements Response
 {
     private Response $origin;
     private string $name;

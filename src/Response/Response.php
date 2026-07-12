@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response;
 
 interface Response
 {

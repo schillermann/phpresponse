@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response;
+
+use PhpResponse\Text;
 
 interface Media
 {

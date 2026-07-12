@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response\StatusLine;
 
-final class ResponseStatusLine implements Response
+use PhpResponse\Response\Response;
+use PhpResponse\Response\Media;
+
+final class StatusLine implements Response
 {
     private Response $origin;
     private int $code;

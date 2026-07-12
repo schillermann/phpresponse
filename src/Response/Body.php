@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response;
 
-final class ResponseBody implements Response
+use PhpResponse\Text;
+
+final class Body implements Response
 {
     private Text $content;
 

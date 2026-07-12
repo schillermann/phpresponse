@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace PhpResponse;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Response\Body;
+use PhpResponse\Response\Header;
+use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\Media\Fake;
 
 final class ResponseTest extends TestCase
 {
     public function testFullResponse(): void
     {
-        $media = (new ResponseStatusLineOk(
-            new ResponseHeader(
-                new ResponseBody(new LiteralText("Hello!")),
+        $media = (new Ok(
+            new Header(
+                new Body(new LiteralText("Hello!")),
                 "X-Custom", "Value"
             )
-        ))->media(new FakeMedia());
+        ))->media(new Fake());
 
-        /** @var FakeMedia $media */
+        /** @var Fake $media */
         $this->assertEquals(
             [
                 "status: 200 OK",
