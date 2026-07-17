@@ -380,11 +380,12 @@ final class LoggedRegistration implements Registration
 At runtime, compose the object graph:
 
 ```php
-use PhpResponse\Log\StreamLog;
+use PhpResponse\Log\FileLog;
+use PhpResponse\LiteralText;
 
 $registration = new LoggedRegistration(
     new UserRegistration(),
-    new StreamLog(fopen('app.log', 'a'))
+    new FileLog(new LiteralText('app.log'))
 );
 
 $registration->register("john_doe");
@@ -451,12 +452,12 @@ use PhpResponse\Route\Method;
 use PhpResponse\Route\ExactPath;
 use PhpResponse\Request\Body as RequestBody;
 use PhpResponse\JsonString;
-use PhpResponse\Log\StreamLog;
+use PhpResponse\Log\FileLog;
 
 // 1. Instantiate the logging-decorated registration service
 $registration = new LoggedRegistration(
     new UserRegistration(),
-    new StreamLog(fopen('app.log', 'a'))
+    new FileLog(new LiteralText('app.log'))
 );
 
 // 2. Define fallback response
@@ -513,13 +514,16 @@ $jsonEntry = new JsonEntry(
 ### Log Targets
 
 * `StreamLog`: Writes entries to standard resources (e.g., standard output, files).
+* `ConsoleLog`: Writes entries directly to standard output (`php://stdout`).
+* `FileLog`: Appends entries directly to a specified file path.
 * `BufferLog`: Appends entries to an in-memory `ArrayObject` without exposing getters.
 * `TeeLog`: Replicates entries to multiple log targets simultaneously.
 * `LevelLog`: Filters entries, only writing those matching allowed levels.
 * `FailsafeLog`: Catches and logs internal exceptions silently, preventing logging errors from crashing the application.
 
 ```php
-use PhpResponse\Log\StreamLog;
+use PhpResponse\Log\ConsoleLog;
+use PhpResponse\Log\FileLog;
 use PhpResponse\Log\TeeLog;
 use PhpResponse\Log\LevelLog;
 use PhpResponse\Log\FailsafeLog;
@@ -531,8 +535,8 @@ use PhpResponse\LiteralText;
 $log = new FailsafeLog(
     new LevelLog(
         new TeeLog(
-            new StreamLog(fopen('php://stdout', 'w')),
-            new StreamLog(fopen('app.log', 'a'))
+            new ConsoleLog(),
+            new FileLog(new LiteralText('app.log'))
         ),
         'ERROR', 'WARNING'
     )
