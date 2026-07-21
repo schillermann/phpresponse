@@ -1,4 +1,4 @@
-# HTTP Status Lines, Headers & Redirects
+# HTTP Headers, Status Lines & Redirects
 
 This section covers how to represent HTTP status lines, response headers, and redirects in `PhpResponse`.
 
