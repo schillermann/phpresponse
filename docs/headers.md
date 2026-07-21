@@ -70,24 +70,30 @@ $response = new JsonHeader(
 
 ## Redirects
 
-The **[Redirect](../src/Response/Redirect.php)** response decorator redirects the client to a different URL.
-It takes a target path/URL (represented as a [Text](../src/Text.php) object) and an optional redirect status code (defaults to `302 Found`).
+Redirect response objects redirect the client to a target URL (represented as a [Text](../src/Text.php) object) with an HTTP status line and `Location` header.
 
-It automatically maps standard HTTP redirect codes to their respective status messages (e.g., `301 Moved Permanently`, `302 Found`, `303 See Other`, `307 Temporary Redirect`, `308 Permanent Redirect`).
+The following autonomous redirect classes are available under the `PhpResponse\Response\Redirect` namespace:
+
+* **[MovedPermanently](../src/Response/Redirect/MovedPermanently.php)**: `301 Moved Permanently`
+* **[Found](../src/Response/Redirect/Found.php)**: `302 Found`
+* **[SeeOther](../src/Response/Redirect/SeeOther.php)**: `303 See Other`
+* **[TemporaryRedirect](../src/Response/Redirect/TemporaryRedirect.php)**: `307 Temporary Redirect`
+* **[PermanentRedirect](../src/Response/Redirect/PermanentRedirect.php)**: `308 Permanent Redirect`
 
 ### Example Usage
 
 ```php
 <?php
 
-use PhpResponse\Response\Redirect;
+use PhpResponse\Response\Redirect\Found;
+use PhpResponse\Response\Redirect\MovedPermanently;
 use PhpResponse\Text\LiteralText;
 
-// Temporary redirect (302 Found)
-$redirect = new Redirect(new LiteralText("/dashboard"));
+// Found redirect (302 Found)
+$redirect = new Found(new LiteralText("/dashboard"));
 
 // Permanent redirect (301 Moved Permanently)
-$permanentRedirect = new Redirect(new LiteralText("/new-location"), 301);
+$permanentRedirect = new MovedPermanently(new LiteralText("/new-location"));
 ```
 
 ---

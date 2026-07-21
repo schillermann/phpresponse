@@ -17,7 +17,11 @@ use PhpResponse\Response\StatusLine\Forbidden;
 use PhpResponse\Response\StatusLine\NotFound;
 use PhpResponse\Response\StatusLine\MethodNotAllowed;
 use PhpResponse\Response\StatusLine\InternalServerError;
-use PhpResponse\Response\Redirect;
+use PhpResponse\Response\Redirect\MovedPermanently;
+use PhpResponse\Response\Redirect\Found;
+use PhpResponse\Response\Redirect\SeeOther;
+use PhpResponse\Response\Redirect\TemporaryRedirect;
+use PhpResponse\Response\Redirect\PermanentRedirect;
 use PhpResponse\Response\JsonHeader;
 use PhpResponse\Response\Media\Fake;
 
@@ -139,9 +143,9 @@ final class ResponseTest extends TestCase
         );
     }
 
-    public function testRedirectDefault(): void
+    public function testFoundRedirect(): void
     {
-        $media = (new Redirect(new LiteralText("/target")))->media(new Fake());
+        $media = (new Found(new LiteralText("/target")))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 302 Found",
@@ -151,13 +155,61 @@ final class ResponseTest extends TestCase
         );
     }
 
-    public function testRedirectMovedPermanently(): void
+    public function testMovedPermanentlyRedirect(): void
     {
-        $media = (new Redirect(new LiteralText("/target-new"), 301))->media(new Fake());
+        $media = (new MovedPermanently(new LiteralText("/target-new")))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 301 Moved Permanently",
                 "header: Location=/target-new"
+            ],
+            $media->array()
+        );
+    }
+
+    public function testSeeOtherRedirect(): void
+    {
+        $media = (new SeeOther(new LiteralText("/see-other")))->media(new Fake());
+        $this->assertEquals(
+            [
+                "status: 303 See Other",
+                "header: Location=/see-other"
+            ],
+            $media->array()
+        );
+    }
+
+    public function testTemporaryRedirect(): void
+    {
+        $media = (new TemporaryRedirect(new LiteralText("/temp")))->media(new Fake());
+        $this->assertEquals(
+            [
+                "status: 307 Temporary Redirect",
+                "header: Location=/temp"
+            ],
+            $media->array()
+        );
+    }
+
+    public function testPermanentRedirect(): void
+    {
+        $media = (new PermanentRedirect(new LiteralText("/perm")))->media(new Fake());
+        $this->assertEquals(
+            [
+                "status: 308 Permanent Redirect",
+                "header: Location=/perm"
+            ],
+            $media->array()
+        );
+    }
+
+    public function testRedirectWithStringTarget(): void
+    {
+        $media = (new Found("/string-target"))->media(new Fake());
+        $this->assertEquals(
+            [
+                "status: 302 Found",
+                "header: Location=/string-target"
             ],
             $media->array()
         );
