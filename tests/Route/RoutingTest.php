@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
-use PhpResponse\Text\LiteralText;
+namespace PhpResponse\Route;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Text\LiteralText;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Media\Fake;
-use PhpResponse\Route\Method;
-use PhpResponse\Route\RegexPath;
-use PhpResponse\Route\ExactPath;
 
 final class RoutingTest extends TestCase
 {

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\TemplateVariable;
+namespace PhpResponse\Text;
 
 use PHPUnit\Framework\TestCase;
 

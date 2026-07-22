@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\FallbackText;
+namespace PhpResponse\Text;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Text;
 
 final class FallbackTextTest extends TestCase
 {

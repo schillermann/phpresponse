@@ -2,17 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\Json\JsonArray;
-use PhpResponse\Text\Json\JsonMember;
-use PhpResponse\Text\Json\JsonObject;
-use PhpResponse\Text\Json\JsonText;
-use PhpResponse\Text\Json\JsonNumber;
-use PhpResponse\Text\Json\JsonTrue;
-use PhpResponse\Text\Json\JsonFalse;
+namespace PhpResponse\Text\Json;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Text\LiteralText;
 
 final class JsonTextTest extends TestCase
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
-use PhpResponse\Text\TextOfNumber;
+namespace PhpResponse\Text;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Number;
 
 final class TextOfNumberTest extends TestCase
 {

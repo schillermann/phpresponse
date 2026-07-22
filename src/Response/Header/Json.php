@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse\Response;
+namespace PhpResponse\Response\Header;
 
 use PhpResponse\Response\Response;
 use PhpResponse\Response\Media;
 
-final class JsonHeader implements Response
+final class Json implements Response
 {
     private Response $origin;
 

@@ -2,15 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Request;
 
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Request\Body;
-use PhpResponse\Request\Header;
-use PhpResponse\Request\Method;
-use PhpResponse\Request\Path;
-use PhpResponse\Request\Protocol;
-use PhpResponse\Request\QueryParam;
 
 final class RequestTest extends TestCase
 {

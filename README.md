@@ -48,4 +48,5 @@ Detailed topics are split into separate files for easy overview:
 - **[Templating](docs/templating.md)**: Covers rendering view templates using variables, external files, and OOP view encapsulation.
 - **[Caching](docs/caching.md)**: Covers caching results for performance using the `StickyText` decorator.
 - **[Routing](docs/routing.md)**: Explains declarative route matching using decorators like `Method`, `ExactPath`, and `RegexPath`.
+- **[Authentication](docs/authentication.md)**: Covers authentication checkpoints (`Checkpoint`) and auth strategies (`BearerToken`, `ApiKey`, `Fake`).
 - **[Logging](docs/logging.md)**: Covers SRP-respecting logger decoration, timestamp/JSON logging entry options, and targets like `TeeLog`, `FileLog`, and `LevelLog`.

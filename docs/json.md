@@ -26,7 +26,7 @@ To output JSON data from your application, use the specialized JSON builders und
 
 use PhpResponse\Response\Body;
 use PhpResponse\Response\StatusLine\Ok;
-use PhpResponse\Response\JsonHeader;
+use PhpResponse\Response\Json;
 use PhpResponse\Text\Json\JsonObject;
 use PhpResponse\Text\Json\JsonMember;
 use PhpResponse\Text\Json\JsonArray;
@@ -34,7 +34,7 @@ use PhpResponse\Text\Json\JsonNumber;
 use PhpResponse\Text\Json\JsonTrue;
 use PhpResponse\Text\LiteralText;
 
-$response = new JsonHeader(
+$response = new Json(
     new Ok(
         new Body(
             new JsonObject(

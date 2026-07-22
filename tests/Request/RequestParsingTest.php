@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Request;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Request\Cookie;
-use PhpResponse\Request\FormParam;
-use PhpResponse\Request\RequestFile;
 use PhpResponse\Text\LiteralText;
 use RuntimeException;
 

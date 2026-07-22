@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Text;
 
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\StripPrefix;
 
 final class StripPrefixTest extends TestCase
 {

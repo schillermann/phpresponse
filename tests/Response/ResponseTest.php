@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Response;
 use PhpResponse\Text\LiteralText;
 
 use PHPUnit\Framework\TestCase;
 use PhpResponse\Response\Body;
-use PhpResponse\Response\Header;
+use PhpResponse\Response\Header\Header;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\StatusLine\Created;
 use PhpResponse\Response\StatusLine\NoContent;
@@ -22,7 +22,7 @@ use PhpResponse\Response\Redirect\Found;
 use PhpResponse\Response\Redirect\SeeOther;
 use PhpResponse\Response\Redirect\TemporaryRedirect;
 use PhpResponse\Response\Redirect\PermanentRedirect;
-use PhpResponse\Response\JsonHeader;
+use PhpResponse\Response\Header\Json;
 use PhpResponse\Response\Media\Fake;
 
 final class ResponseTest extends TestCase
@@ -42,6 +42,19 @@ final class ResponseTest extends TestCase
                 "status: 200 OK",
                 "header: X-Custom=Value",
                 "body: Hello!"
+            ],
+            $media->array()
+        );
+    }
+
+    public function testBodyWithStringContent(): void
+    {
+        $media = (new Ok(new Body("Hello String!")))->media(new Fake());
+        /** @var Fake $media */
+        $this->assertEquals(
+            [
+                "status: 200 OK",
+                "body: Hello String!"
             ],
             $media->array()
         );
@@ -215,9 +228,9 @@ final class ResponseTest extends TestCase
         );
     }
 
-    public function testJsonHeader(): void
+    public function testJson(): void
     {
-        $media = (new JsonHeader(
+        $media = (new Json(
             new Ok(new Body(new LiteralText('{"abc":123}')))
         ))->media(new Fake());
         $this->assertEquals(

@@ -39,10 +39,15 @@ $response = new NotFound(
 
 ## Headers & Specialized Formatting
 
-HTTP headers are applied using response decorators.
+HTTP response headers are applied using decorators implementing the `Response` interface under the `PhpResponse\Response\Header` namespace:
 
-* **[Header](../src/Response/Header.php)**: A generic decorator that sets any custom header on the response.
-* **[JsonHeader](../src/Response/JsonHeader.php)**: A specialized header decorator that sets the `Content-Type: application/json` header.
+* **[Header](../src/Response/Header/Header.php)**: A response decorator that sets any HTTP header (`Name`, `Value`) on the outgoing response.
+* **[Json](../src/Response/Header/Json.php)**: A specialized response decorator that sets `Content-Type: application/json`.
+* **[Cors](../src/Response/Header/Cors.php)**: A macro decorator that injects CORS response headers.
+* **Specialized CORS Header Decorators**:
+  - **[AllowOrigin](../src/Response/Header/AllowOrigin.php)** (`Access-Control-Allow-Origin`)
+  - **[AllowHeaders](../src/Response/Header/AllowHeaders.php)** (`Access-Control-Allow-Headers`)
+  - **[AllowMethods](../src/Response/Header/AllowMethods.php)** (`Access-Control-Allow-Methods`)
 
 ### Example Usage
 
@@ -51,11 +56,19 @@ HTTP headers are applied using response decorators.
 
 use PhpResponse\Response\Body;
 use PhpResponse\Response\StatusLine\Ok;
-use PhpResponse\Response\JsonHeader;
+use PhpResponse\Response\Header\Header;
+use PhpResponse\Response\Header\Json;
 use PhpResponse\Text\Json\JsonObject;
 use PhpResponse\Text\Json\JsonMember;
 
-$response = new JsonHeader(
+// Attach a custom header
+$customResponse = new Header(
+    new Ok(new Body("Hello")),
+    "X-Custom-Header", "Value"
+);
+
+// JSON response with Content-Type header
+$jsonResponse = new Json(
     new Ok(
         new Body(
             new JsonObject(
@@ -63,6 +76,39 @@ $response = new JsonHeader(
             )
         )
     )
+);
+```
+
+---
+
+## CORS Headers (`Cors`)
+
+`Cors` is a macro response decorator under `PhpResponse\Response\Header` that composes CORS header decorators (`AllowOrigin`, `AllowHeaders`, `AllowMethods`):
+
+* `Access-Control-Allow-Origin` (default: `*`)
+* `Access-Control-Allow-Headers` (default: `Content-Type, Authorization`)
+* `Access-Control-Allow-Methods` (default: `GET, POST, PUT, DELETE, OPTIONS`)
+
+### Example Usage
+
+```php
+<?php
+
+use PhpResponse\Response\Body;
+use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\Header\Cors;
+
+// Default CORS headers (*)
+$corsResponse = new Cors(
+    new Ok(new Body("CORS enabled response"))
+);
+
+// Custom CORS configuration
+$customCorsResponse = new Cors(
+    new Ok(new Body("Custom CORS response")),
+    "https://example.com",
+    "Content-Type, X-Custom-Header",
+    "GET, POST"
 );
 ```
 

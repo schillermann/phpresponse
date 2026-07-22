@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Request;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Request\PathParam;
 use PhpResponse\Text\LiteralText;
 
 final class PathParamTest extends TestCase

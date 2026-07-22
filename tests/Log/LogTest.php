@@ -2,23 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
-use PhpResponse\Text\LiteralText;
+namespace PhpResponse\Log;
 
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Log\Log;
-use PhpResponse\Log\PlainEntry;
-use PhpResponse\Log\StreamLog;
-use PhpResponse\Log\TeeLog;
-use PhpResponse\Log\BufferLog;
-use PhpResponse\Log\LoggedText;
-use PhpResponse\Log\Epoch;
-use PhpResponse\Log\TimestampedEntry;
-use PhpResponse\Log\JsonEntry;
-use PhpResponse\Log\FailsafeLog;
-use PhpResponse\Log\LevelLog;
-use PhpResponse\Log\FileLog;
-use PhpResponse\Log\ConsoleLog;
+use PhpResponse\Text\LiteralText;
 use PhpResponse\Log\Level\InfoLevel;
 use PhpResponse\Log\Level\DebugLevel;
 use PhpResponse\Log\Level\ErrorLevel;

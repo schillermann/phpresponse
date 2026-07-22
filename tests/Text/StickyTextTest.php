@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
-use PhpResponse\Text\StickyText;
+namespace PhpResponse\Text;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Text;
 
 final class StickyTextTest extends TestCase
 {

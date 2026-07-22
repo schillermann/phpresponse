@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse;
+namespace PhpResponse\Route;
 
 use PHPUnit\Framework\TestCase;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\Media\Fake;
 use PhpResponse\Response\StatusLine\Ok;
-use PhpResponse\Route\ExactPath;
-use PhpResponse\Route\PrefixPath;
 use PhpResponse\Text\LiteralText;
 use PhpResponse\Text\StripPrefix;
 
