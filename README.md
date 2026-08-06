@@ -42,13 +42,13 @@ use PhpResponse\Text\LiteralText;
 
 Detailed topics are split into separate files for easy overview:
 
-- **[Request](docs/requests.md)**: Covers declarative request parsing (header, method, path, body, protocol, query/form parameters, cookies, file uploads).
-- **[JSON](docs/json.md)**: Covers parsing incoming JSON requests and declaratively building JSON responses.
-- **[Headers](docs/headers.md)**: Covers HTTP status codes, response headers, redirects, and specialized content-type headers.
-- **[Templating](docs/templating.md)**: Covers rendering view templates using variables, external files, and OOP view encapsulation.
-- **[Caching](docs/caching.md)**: Covers caching results for performance using the `StickyText` decorator.
-- **[Routing](docs/routing.md)**: Explains declarative route matching using decorators like `Method`, `ExactPath`, and `RegexPath`.
 - **[Authentication](docs/authentication.md)**: Covers authentication checkpoints (`Checkpoint`) and auth strategies (`BearerToken`, `ApiKey`, `Fake`).
-- **[Logging](docs/logging.md)**: Covers SRP-respecting logger decoration, timestamp/JSON logging entry options, and targets like `TeeLog`, `FileLog`, `LevelLog`, and `MemoryBuffer`.
+- **[Caching](docs/caching.md)**: Covers caching results for performance using the `StickyText` decorator.
 - **[Database](docs/database.md)**: Covers database integration (`Database`, `Statement`, `Outcome`, `PdoDatabase`, `Fake`) and transaction boundary decorators (`TransactionalResponse`, `SqlTransaction`, `SqliteTransaction`, `PdoTransaction`).
+- **[Headers](docs/headers.md)**: Covers HTTP status codes, response headers, redirects, and specialized content-type headers.
+- **[JSON](docs/json.md)**: Covers parsing incoming JSON requests and declaratively building JSON responses.
+- **[Logging](docs/logging.md)**: Covers SRP-respecting logger decoration, timestamp/JSON logging entry options, and targets like `TeeLog`, `FileLog`, `LevelLog`, and `MemoryBuffer`.
+- **[Request](docs/requests.md)**: Covers declarative request parsing (header, method, path, body, protocol, query/form parameters, cookies, file uploads).
+- **[Routing](docs/routing.md)**: Explains declarative route matching using decorators like `Method`, `ExactPath`, and `RegexPath`.
 - **[Session](docs/session.md)**: Covers immutable session state management (`Session`, `ArraySession`, `EncryptedCookieSession`) and composite session decoration (`JoinedSession`).
+- **[Templating](docs/templating.md)**: Covers rendering view templates using variables, external files, and OOP view encapsulation.

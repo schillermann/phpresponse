@@ -68,21 +68,50 @@ echo $jsonOutput->string();
 
 In true Object-Oriented Programming, **HTTP Response objects should never write raw SQL queries or table names directly inside their handlers**.
 
-Instead, applications define domain objects (such as `Users`) that speak SQL internally:
+Instead, applications define domain objects (such as `Users` and `User`) that speak SQL internally:
 
 ```php
 use PhpResponse\Database\Database;
 use PhpResponse\Database\SqlQuery;
-use PhpResponse\Database\QueryResult;
 use PhpResponse\Text;
 
-// Application domain contract
-interface Users
+// Application domain entity interface
+interface User
 {
-    public function add(Text $name, Text $email): QueryResult;
+    public function name(): Text;
+    public function email(): Text;
 }
 
-// SQL-speaking implementation of the domain contract
+// Application domain collection interface (Returns User object, zero void side-effects)
+interface Users
+{
+    public function createdUser(Text $name, Text $email): User;
+}
+
+// SQL-speaking implementation of domain entity
+final class SqlUser implements User
+{
+    private Text $name;
+    private Text $email;
+
+    public function __construct(Text $name, Text $email)
+    {
+        $this->name = $name;
+        $this->email = $email;
+    }
+
+    public function name(): Text
+    {
+        return $this->name;
+    }
+
+    public function email(): Text
+    {
+        return $this->email;
+    }
+}
+
+// SQL-speaking implementation of domain collection
 final class SqlUsers implements Users
 {
     private Database $db;
@@ -92,9 +121,9 @@ final class SqlUsers implements Users
         $this->db = $db;
     }
 
-    public function add(Text $name, Text $email): Outcome
+    public function createdUser(Text $name, Text $email): User
     {
-        return $this->db->outcome(
+        $this->db->outcome(
             new SqlQuery(
                 "INSERT INTO users (name, email) VALUES (:name, :email)",
                 [
@@ -103,6 +132,8 @@ final class SqlUsers implements Users
                 ]
             )
         );
+
+        return new SqlUser($name, $email);
     }
 }
 ```
@@ -141,8 +172,8 @@ $userResponse = new class($users) implements Response {
     }
 
     public function media(Media $media): Media {
-        // Delegate to domain object
-        $this->users->add(
+        // Delegate to domain object (Returns User entity, explicit noun phrase createdUser)
+        $user = $this->users->createdUser(
             new LiteralText("Bob"),
             new LiteralText("bob@example.com")
         );
