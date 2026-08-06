@@ -7,19 +7,15 @@ namespace PhpResponse\Response\Header;
 use PhpResponse\Response\Response;
 use PhpResponse\Response\Media;
 use PhpResponse\Text;
-use PhpResponse\Text\JoinedText;
+use PhpResponse\Text\LiteralText;
 
 final class AllowHeaders implements Response
 {
     private Response $origin;
 
-    /**
-     * @param Text|array<Text|string>|string $allowHeaders
-     */
-    public function __construct(Response $origin, Text|array|string $allowHeaders = 'Content-Type, Authorization')
+    public function __construct(Response $origin, Text $allowHeaders = new LiteralText('Content-Type, Authorization'))
     {
-        $value = is_array($allowHeaders) ? new JoinedText($allowHeaders, ', ') : $allowHeaders;
-        $this->origin = new Header($origin, 'Access-Control-Allow-Headers', $value);
+        $this->origin = new Header($origin, 'Access-Control-Allow-Headers', $allowHeaders);
     }
 
     public function media(Media $media): Media

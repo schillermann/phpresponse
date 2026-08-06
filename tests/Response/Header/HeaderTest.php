@@ -2,12 +2,18 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse\Response\Header;
+namespace PhpResponse\Tests\Response\Header;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Response\Header\Header;
+use PhpResponse\Response\Header\AllowHeaders;
+use PhpResponse\Response\Header\AllowMethods;
+use PhpResponse\Response\Header\AllowOrigin;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\Media\Fake;
+use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\JoinedText;
 
 final class HeaderTest extends TestCase
 {
@@ -52,7 +58,7 @@ final class HeaderTest extends TestCase
     {
         $response = new AllowOrigin(
             new Ok(new Body("Hello")),
-            "https://example.com"
+            new LiteralText("https://example.com")
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */
@@ -70,7 +76,7 @@ final class HeaderTest extends TestCase
     {
         $response = new AllowHeaders(
             new Ok(new Body("Hello")),
-            "X-Custom-Header"
+            new LiteralText("X-Custom-Header")
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */
@@ -88,7 +94,7 @@ final class HeaderTest extends TestCase
     {
         $response = new AllowMethods(
             new Ok(new Body("Hello")),
-            "GET, POST"
+            new LiteralText("GET, POST")
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */
@@ -102,11 +108,16 @@ final class HeaderTest extends TestCase
         );
     }
 
-    public function testAllowMethodsHeaderWithArray(): void
+    public function testAllowMethodsHeaderWithJoinedText(): void
     {
         $response = new AllowMethods(
             new Ok(new Body("Hello")),
-            ["GET", "POST", "DELETE"]
+            new JoinedText(
+                new LiteralText(", "),
+                new LiteralText("GET"),
+                new LiteralText("POST"),
+                new LiteralText("DELETE")
+            )
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */

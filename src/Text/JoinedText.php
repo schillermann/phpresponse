@@ -8,29 +8,22 @@ use PhpResponse\Text;
 
 final class JoinedText implements Text
 {
-    /** @var array<Text|string> */
-    private array $items;
-    private string $separator;
+    private Text $separator;
 
-    /**
-     * @param array<Text|string> $items
-     */
-    public function __construct(array $items, string $separator = ", ")
+    /** @var array<Text> */
+    private array $items;
+
+    public function __construct(Text $separator, Text ...$items)
     {
-        $this->items = $items;
         $this->separator = $separator;
+        $this->items = $items;
     }
 
     public function string(): string
     {
         return implode(
-            $this->separator,
-            array_map(function (Text|string $t): string {
-                if ($t instanceof Text) {
-                    return $t->string();
-                }
-                return (string) $t;
-            }, $this->items)
+            $this->separator->string(),
+            array_map(fn(Text $t): string => $t->string(), $this->items)
         );
     }
 }

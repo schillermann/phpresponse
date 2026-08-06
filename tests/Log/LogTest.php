@@ -7,12 +7,22 @@ namespace PhpResponse\Log;
 use PHPUnit\Framework\TestCase;
 use PhpResponse\Text\LiteralText;
 use PhpResponse\Log\Level\InfoLevel;
-use PhpResponse\Log\Level\DebugLevel;
 use PhpResponse\Log\Level\ErrorLevel;
 use PhpResponse\Log\Level\WarningLevel;
 
 final class LogTest extends TestCase
 {
+    public function testMemoryBufferLogStoresEntries(): void
+    {
+        $buffer = new MemoryBuffer();
+        $log = new BufferLog($buffer);
+
+        $log->write(new PlainEntry(new InfoLevel(), new LiteralText('something happened')));
+
+        $this->assertCount(1, $buffer->entries());
+        $this->assertSame('INFO: something happened', $buffer->entries()[0]);
+    }
+
     public function testStreamLogWritesToStream(): void
     {
         $stream = fopen('php://memory', 'r+');

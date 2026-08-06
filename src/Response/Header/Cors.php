@@ -7,6 +7,7 @@ namespace PhpResponse\Response\Header;
 use PhpResponse\Response\Response;
 use PhpResponse\Response\Media;
 use PhpResponse\Text;
+use PhpResponse\Text\LiteralText;
 
 final class Cors implements Response
 {
@@ -14,16 +15,13 @@ final class Cors implements Response
 
     public function __construct(
         Response $origin,
-        Text|string $allowOrigin = '*',
-        Text|array|string $allowHeaders = 'Content-Type, Authorization',
-        Text|array|string $allowMethods = 'GET, POST, PUT, DELETE, OPTIONS'
+        Text $allowOrigin = new LiteralText('*'),
+        Text $allowHeaders = new LiteralText('Content-Type, Authorization'),
+        Text $allowMethods = new LiteralText('GET, POST, PUT, DELETE, OPTIONS')
     ) {
         $this->origin = new AllowOrigin(
             new AllowHeaders(
-                new AllowMethods(
-                    $origin,
-                    $allowMethods
-                ),
+                new AllowMethods($origin, $allowMethods),
                 $allowHeaders
             ),
             $allowOrigin

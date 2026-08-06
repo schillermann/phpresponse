@@ -204,12 +204,55 @@ $jsonEntry = new JsonEntry(
 
 ---
 
+## Log Exception Entries
+
+Serialize PHP `Throwable` exceptions into autonomous [`LogEntry`](../src/Log/LogEntry.php) objects ([`ExceptionEntry`](../src/Log/ExceptionEntry.php)):
+
+```php
+use PhpResponse\Log\ExceptionEntry;
+use PhpResponse\Log\FileLog;
+use PhpResponse\Text\ProjectPath;
+
+try {
+    // Risky operation
+} catch (\Throwable $ex) {
+    $log = new FileLog(new ProjectPath('errors.log'));
+    $log->write(new ExceptionEntry($ex));
+}
+```
+
+---
+
+## In-Memory Log Buffers (`LogBuffer` & `MemoryBuffer`)
+
+For testing or in-memory log aggregation ([`LogBuffer`](../src/Log/LogBuffer.php) and [`MemoryBuffer`](../src/Log/MemoryBuffer.php)):
+
+```php
+use PhpResponse\Log\MemoryBuffer;
+use PhpResponse\Log\BufferLog;
+use PhpResponse\Log\PlainEntry;
+use PhpResponse\Log\Level\InfoLevel;
+use PhpResponse\Text\LiteralText;
+
+$buffer = new MemoryBuffer();
+$log = new BufferLog($buffer);
+
+$log->write(new PlainEntry(new InfoLevel(), new LiteralText('Action completed')));
+
+// Inspect stored log string entries
+foreach ($buffer->entries() as $entryString) {
+    echo $entryString;
+}
+```
+
+---
+
 ## Log Targets
 
 * `StreamLog`: Writes entries to standard resources (e.g., standard output, files).
 * `ConsoleLog`: Writes entries directly to standard output (`php://stdout`).
 * `FileLog`: Appends entries directly to a specified file path.
-* `BufferLog`: Appends entries to an in-memory `ArrayObject` without exposing getters.
+* `BufferLog`: Appends entries to an in-memory `LogBuffer` (`MemoryBuffer`) without exposing getters.
 * `TeeLog`: Replicates entries to multiple log targets simultaneously.
 * `LevelLog`: Filters entries, only writing those matching allowed levels.
 * `FailsafeLog`: Catches and logs internal exceptions silently, preventing logging errors from crashing the application.

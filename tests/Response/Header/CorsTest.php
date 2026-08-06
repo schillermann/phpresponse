@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpResponse\Response\Header;
+namespace PhpResponse\Tests\Response\Header;
 
 use PHPUnit\Framework\TestCase;
+use PhpResponse\Response\Header\Cors;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Body;
 use PhpResponse\Text\LiteralText;
@@ -37,9 +38,9 @@ final class CorsTest extends TestCase
     {
         $response = new Cors(
             new Ok(new Body(new LiteralText("Custom CORS"))),
-            "https://example.com",
-            "X-Custom-Header",
-            "GET, POST"
+            new LiteralText("https://example.com"),
+            new LiteralText("X-Custom-Header"),
+            new LiteralText("GET, POST")
         );
 
         $media = $response->media(new Fake());
