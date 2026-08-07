@@ -1,38 +1,88 @@
-# Authentication & Checkpoints
+# Authentication, Passports & CSRF Protection
 
-This section covers how authentication checkpoints and authorization strategies are composed using **Response Decorators** in `PhpResponse`.
+This section covers how authentication checkpoints, stateless **Passports**, **Identity** management, and **CSRF Guard Decorators** are composed in `PhpResponse`.
 
 ---
 
-In `PhpResponse`, authentication is not handled by global middleware or procedural session state. Instead, authentication checks are composed declaratively through immutable **Authentication Checkpoints** (`Checkpoint` under `PhpResponse\Auth`) and **Authentication Strategies** (`PhpResponse\Auth\Header`).
+In `PhpResponse`, authentication and security are not handled by global middleware or procedural session state. Instead, security checks are composed declaratively through immutable **Response Decorators** (`Checkpoint`, `GuardedResponse`), **Passports** (`Pass`), and **Tokens** (`CsrfToken`).
 
-## Authentication Checkpoint (`Checkpoint`)
+---
 
-`Checkpoint` decorates a target response with an `Authentication` strategy. If the authentication check succeeds (`$auth->valid() === true`), execution proceeds to the target response; otherwise, it falls back to an unauthorized or error response.
+## CSRF Protection (`PhpResponse\Auth\Csrf`)
+
+CSRF protection prevents unauthorized, cross-site state-modifying requests (POST, PUT, DELETE, PATCH).
+
+### `GuardedResponse`
+A response decorator that automatically allows safe HTTP methods (`GET`, `HEAD`, `OPTIONS`) to pass through to `$target`, while verifying CSRF tokens for state-modifying requests.
+
+```php
+use PhpResponse\Auth\Csrf\GuardedResponse;
+use PhpResponse\Auth\Csrf\SameToken;
+use PhpResponse\Auth\Csrf\RequestCandidate;
+use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\StatusLine\Forbidden;
+use PhpResponse\Response\Body;
+use PhpResponse\Text\LiteralText;
+
+$guardedRoute = new GuardedResponse(
+    new Ok(new Body(new LiteralText("Resource updated successfully."))),
+    new SameToken(new LiteralText("expected-session-csrf-secret")),
+    new Forbidden(new Body(new LiteralText("CSRF verification failed."))),
+    new RequestCandidate() // Automatically inspects X-CSRF-Token, X-XSRF-Token, csrf_token, _token
+);
+```
+
+### CSRF Token Representations
+- **`SameToken`**: Validates a candidate against an expected token using constant-time string comparison (`hash_equals`).
+- **`RandomToken`**: Cryptographically secure random CSRF token generator.
+- **`RequestCandidate`**: Extracts candidate CSRF tokens from incoming HTTP headers or form parameters.
+- **`CsrfCandidate`**: Composite `Text` object for custom fallback chains of token candidates.
+
+---
+
+## Stateless Passports & Identity (`PhpResponse\Auth\Pass`)
+
+In pure OOP, identity is encapsulated into stateless **Passport (`Pass`)** objects that inspect incoming requests (from headers, cookies, or tokens) and return an **`Identity`** object without reliance on mutable server session state.
+
+### Identity Contracts
+- **`Identity`**: Interface defining `name(): Text` and `authenticated(): bool`.
+- **`AnonymousIdentity`**: Null Object implementation returned when no valid credentials are found (`authenticated() === false`).
+- **`UserIdentity`**: Authenticated identity wrapper containing user information (`authenticated() === true`).
+
+### Passport Strategies (`Pass`)
+- **`Cookie`**: Extracts identity from an HTTP cookie (`new Cookie("ps_identity")`).
+- **`Header`**: Extracts identity from a custom HTTP header (`new Header("X-Identity")`).
+- **`Bearer`**: Extracts identity from `Authorization: Bearer <token>` headers (`new Bearer()`).
+- **`Fake`**: Mock passport for testing (`new Fake(new UserIdentity("alice"))`).
+
+### Combining Passports with Checkpoints
+Adapt any `Pass` into an `Authentication` strategy using `IdentityAuthentication`:
 
 ```php
 use PhpResponse\Auth\Checkpoint;
+use PhpResponse\Auth\Pass\Bearer;
+use PhpResponse\Auth\Pass\IdentityAuthentication;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\StatusLine\Unauthorized;
 use PhpResponse\Response\Body;
-use PhpResponse\Auth\Header\BearerToken;
+use PhpResponse\Text\LiteralText;
 
-$protectedRoute = new Checkpoint(
-    new Ok(new Body("Secret dashboard data")),
-    new Unauthorized(new Body("Invalid or missing Bearer token")),
-    new BearerToken("secret-app-token")
+$protectedDashboard = new Checkpoint(
+    new Ok(new Body(new LiteralText("Welcome to the Admin Panel"))),
+    new Unauthorized(new Body(new LiteralText("Please log in"))),
+    new IdentityAuthentication(
+        new Bearer("Authorization")
+    )
 );
 ```
 
 ---
 
-## Built-in Authentication Strategies (`PhpResponse\Auth\Header`)
+## Header-Based Authentication (`PhpResponse\Auth\Header`)
 
-`PhpResponse` provides several immutable `Authentication` implementations:
+For simple API key or bearer token authentication checks:
 
 ### `BearerToken`
-Validates the `Authorization` header against an expected bearer token string or `Text` object.
-
 ```php
 use PhpResponse\Auth\Header\BearerToken;
 
@@ -40,8 +90,6 @@ $auth = new BearerToken("my-secret-token");
 ```
 
 ### `ApiKey`
-Validates that an HTTP header matches an expected API key value.
-
 ```php
 use PhpResponse\Auth\Header\ApiKey;
 
@@ -49,43 +97,44 @@ $auth = new ApiKey("my-api-key", "X-Api-Key");
 ```
 
 ### `Fake`
-Fake authentication object for testing or mocking authentication results.
-
 ```php
 use PhpResponse\Auth\Fake;
 
-$allowAll = new Fake(true);  // Always returns true
-$denyAll = new Fake(false); // Always returns false
+$allowAll = new Fake(true);  // Always passes
+$denyAll = new Fake(false); // Always fails
 ```
 
 ---
 
-## Combining Authentication with Headers & Routing
-
-Example of wrapping a protected route inside CORS and path matching:
+## Full Example: Combining CSRF, Passports, and Routing
 
 ```php
-use PhpResponse\Response\Header\Cors;
+use PhpResponse\Route\ExactPath;
+use PhpResponse\Auth\Csrf\GuardedResponse;
+use PhpResponse\Auth\Csrf\SameToken;
+use PhpResponse\Auth\Pass\Cookie;
+use PhpResponse\Auth\Pass\IdentityAuthentication;
 use PhpResponse\Auth\Checkpoint;
 use PhpResponse\Response\StatusLine\Ok;
+use PhpResponse\Response\StatusLine\Forbidden;
 use PhpResponse\Response\StatusLine\Unauthorized;
 use PhpResponse\Response\StatusLine\NotFound;
 use PhpResponse\Response\Body;
-use PhpResponse\Auth\Header\BearerToken;
-use PhpResponse\Route\ExactPath;
+use PhpResponse\Text\LiteralText;
 
-$notFound = new NotFound(new Body("Not Found"));
-$unauthorized = new Unauthorized(new Body("Unauthorized"));
-
-$app = new Cors(
-    new ExactPath(
-        "/api/protected",
-        new Checkpoint(
-            new Ok(new Body('{"data":"confidential"}')),
-            $unauthorized,
-            new BearerToken("secure-token-123")
+$app = new ExactPath(
+    "/user/settings",
+    new Checkpoint(
+        new GuardedResponse(
+            new Ok(new Body(new LiteralText("Settings updated."))),
+            new SameToken(new LiteralText("secret-csrf-token")),
+            new Forbidden(new Body(new LiteralText("403 Forbidden")))
         ),
-        $notFound
-    )
+        new Unauthorized(new Body(new LiteralText("401 Unauthorized"))),
+        new IdentityAuthentication(
+            new Cookie("auth_user")
+        )
+    ),
+    new NotFound(new Body(new LiteralText("404 Not Found")))
 );
 ```

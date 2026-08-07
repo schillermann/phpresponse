@@ -42,7 +42,7 @@ use PhpResponse\Text\LiteralText;
 
 Detailed topics are split into separate files for easy overview:
 
-- **[Authentication](docs/authentication.md)**: Covers authentication checkpoints (`Checkpoint`) and auth strategies (`BearerToken`, `ApiKey`, `Fake`).
+- **[Authentication & CSRF](docs/authentication.md)**: Covers authentication checkpoints (`Checkpoint`), stateless passports (`Pass`, `Cookie`, `Header`, `Bearer`), identity management (`Identity`), and CSRF guard decorators (`GuardedResponse`, `CsrfToken`).
 - **[Caching](docs/caching.md)**: Covers caching results for performance using the `StickyText` decorator.
 - **[Database](docs/database.md)**: Covers database integration (`Database`, `Statement`, `Outcome`, `PdoDatabase`, `Fake`) and transaction boundary decorators (`TransactionalResponse`, `SqlTransaction`, `SqliteTransaction`, `PdoTransaction`).
 - **[Headers](docs/headers.md)**: Covers HTTP status codes, response headers, redirects, and specialized content-type headers.
