@@ -10,7 +10,7 @@ use PhpResponse\Auth\Csrf\RandomToken;
 use PhpResponse\Auth\Csrf\CsrfCandidate;
 use PhpResponse\Auth\Csrf\RequestCandidate;
 use PhpResponse\Auth\Csrf\GuardedResponse;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\StatusLine\Forbidden;
@@ -22,17 +22,17 @@ final class CsrfTest extends TestCase
     {
         $token = new SameToken("secret-token");
         $this->assertEquals("secret-token", $token->string());
-        $this->assertTrue($token->valid(new LiteralText("secret-token")));
-        $this->assertFalse($token->valid(new LiteralText("wrong-token")));
-        $this->assertFalse($token->valid(new LiteralText("")));
+        $this->assertTrue($token->valid(new Literal("secret-token")));
+        $this->assertFalse($token->valid(new Literal("wrong-token")));
+        $this->assertFalse($token->valid(new Literal("")));
     }
 
     public function testRandomTokenGeneratesValidToken(): void
     {
         $token = new RandomToken(16);
         $this->assertEquals(32, strlen($token->string())); // 16 bytes = 32 hex chars
-        $this->assertTrue($token->valid(new LiteralText($token->string())));
-        $this->assertFalse($token->valid(new LiteralText("invalid")));
+        $this->assertTrue($token->valid(new Literal($token->string())));
+        $this->assertFalse($token->valid(new Literal("invalid")));
     }
 
     public function testCsrfCandidateFallbackWhenEmpty(): void
@@ -40,7 +40,7 @@ final class CsrfTest extends TestCase
         $candidate = new CsrfCandidate();
         $this->assertEquals("", $candidate->string());
 
-        $customCandidate = new CsrfCandidate(new LiteralText("header-token"));
+        $customCandidate = new CsrfCandidate(new Literal("header-token"));
         $this->assertEquals("header-token", $customCandidate->string());
     }
 
@@ -62,8 +62,8 @@ final class CsrfTest extends TestCase
             $target,
             $token,
             $fallback,
-            new LiteralText("wrong-token"),
-            new LiteralText("GET")
+            new Literal("wrong-token"),
+            new Literal("GET")
         );
 
         $media = $guarded->media(new Fake());
@@ -87,8 +87,8 @@ final class CsrfTest extends TestCase
             $target,
             $token,
             $fallback,
-            new LiteralText("valid-token"),
-            new LiteralText("POST")
+            new Literal("valid-token"),
+            new Literal("POST")
         );
 
         $media = $guarded->media(new Fake());
@@ -112,8 +112,8 @@ final class CsrfTest extends TestCase
             $target,
             $token,
             $fallback,
-            new LiteralText("invalid-token"),
-            new LiteralText("POST")
+            new Literal("invalid-token"),
+            new Literal("POST")
         );
 
         $media = $guarded->media(new Fake());

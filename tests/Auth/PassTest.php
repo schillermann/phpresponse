@@ -12,7 +12,7 @@ use PhpResponse\Auth\Pass\Header;
 use PhpResponse\Auth\Pass\Bearer;
 use PhpResponse\Auth\Pass\Fake;
 use PhpResponse\Auth\Pass\IdentityAuthentication;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class PassTest extends TestCase
 {

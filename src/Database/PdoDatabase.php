@@ -6,7 +6,7 @@ namespace PhpResponse\Database;
 
 use PDO;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use RuntimeException;
 
 final class PdoDatabase implements Database
@@ -40,6 +40,6 @@ final class PdoDatabase implements Database
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $encoded = json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-        return new LiteralText($encoded !== false ? $encoded : "[]");
+        return new Literal($encoded !== false ? $encoded : "[]");
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Log;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use Throwable;
 
 final class ExceptionEntry implements LogEntry
@@ -19,12 +19,12 @@ final class ExceptionEntry implements LogEntry
 
     public function level(): Text
     {
-        return new LiteralText("ERROR");
+        return new Literal("ERROR");
     }
 
     public function message(): Text
     {
-        return new LiteralText(
+        return new Literal(
             $this->exception->getMessage() . "\n" . $this->exception->getTraceAsString()
         );
     }

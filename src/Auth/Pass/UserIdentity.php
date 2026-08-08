@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Auth\Pass;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class UserIdentity implements Identity
 {
@@ -13,7 +13,7 @@ final class UserIdentity implements Identity
 
     public function __construct(Text|string $name)
     {
-        $this->name = is_string($name) ? new LiteralText($name) : $name;
+        $this->name = is_string($name) ? new Literal($name) : $name;
     }
 
     public function name(): Text

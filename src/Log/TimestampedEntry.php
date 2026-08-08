@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpResponse\Log;
 
 use PhpResponse\Text;
-use PhpResponse\Text\FormattedText;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Formatted;
+use PhpResponse\Text\Literal;
 
 final class TimestampedEntry implements LogEntry
 {
@@ -26,8 +26,8 @@ final class TimestampedEntry implements LogEntry
 
     public function message(): Text
     {
-        return new FormattedText(
-            new LiteralText("[%s] %s"),
+        return new Formatted(
+            new Literal("[%s] %s"),
             $this->epoch,
             $this->origin->message()
         );

@@ -6,7 +6,7 @@ namespace PhpResponse\Auth\Header;
 
 use PhpResponse\Auth\Authentication;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Request\Header;
 
 final class BearerToken implements Authentication
@@ -16,7 +16,7 @@ final class BearerToken implements Authentication
 
     public function __construct(Text|string $token, Text|string $header = 'Authorization')
     {
-        $this->token = is_string($token) ? new LiteralText($token) : $token;
+        $this->token = is_string($token) ? new Literal($token) : $token;
         $this->header = is_string($header) ? new Header($header) : $header;
     }
 

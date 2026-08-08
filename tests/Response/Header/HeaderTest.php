@@ -12,8 +12,8 @@ use PhpResponse\Response\Header\AllowOrigin;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\Media\Fake;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\JoinedText;
+use PhpResponse\Text\Literal;
+use PhpResponse\Text\Joined;
 
 final class HeaderTest extends TestCase
 {
@@ -39,8 +39,8 @@ final class HeaderTest extends TestCase
     {
         $response = new Header(
             new Ok(new Body("Hello")),
-            new \PhpResponse\Text\LiteralText("X-Dynamic-Name"),
-            new \PhpResponse\Text\LiteralText("DynamicValue")
+            new \PhpResponse\Text\Literal("X-Dynamic-Name"),
+            new \PhpResponse\Text\Literal("DynamicValue")
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */
@@ -58,7 +58,7 @@ final class HeaderTest extends TestCase
     {
         $response = new AllowOrigin(
             new Ok(new Body("Hello")),
-            new LiteralText("https://example.com")
+            new Literal("https://example.com")
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */
@@ -76,7 +76,7 @@ final class HeaderTest extends TestCase
     {
         $response = new AllowHeaders(
             new Ok(new Body("Hello")),
-            new LiteralText("X-Custom-Header")
+            new Literal("X-Custom-Header")
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */
@@ -94,7 +94,7 @@ final class HeaderTest extends TestCase
     {
         $response = new AllowMethods(
             new Ok(new Body("Hello")),
-            new LiteralText("GET, POST")
+            new Literal("GET, POST")
         );
         $media = $response->media(new Fake());
         /** @var Fake $media */
@@ -108,15 +108,15 @@ final class HeaderTest extends TestCase
         );
     }
 
-    public function testAllowMethodsHeaderWithJoinedText(): void
+    public function testAllowMethodsHeaderWithJoined(): void
     {
         $response = new AllowMethods(
             new Ok(new Body("Hello")),
-            new JoinedText(
-                new LiteralText(", "),
-                new LiteralText("GET"),
-                new LiteralText("POST"),
-                new LiteralText("DELETE")
+            new Joined(
+                new Literal(", "),
+                new Literal("GET"),
+                new Literal("POST"),
+                new Literal("DELETE")
             )
         );
         $media = $response->media(new Fake());

@@ -6,7 +6,7 @@ namespace PhpResponse\Tests\Session;
 
 use PhpResponse\Session\ArraySession;
 use PhpResponse\Session\JoinedSession;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PHPUnit\Framework\TestCase;
 
 final class JoinedSessionTest extends TestCase
@@ -14,16 +14,16 @@ final class JoinedSessionTest extends TestCase
     public function testJoinedSessionOverridesSecondaryValues(): void
     {
         $secondary = new ArraySession([
-            'role' => new LiteralText('user'),
-            'theme' => new LiteralText('light'),
+            'role' => new Literal('user'),
+            'theme' => new Literal('light'),
         ]);
 
         $primary = new ArraySession([
-            'role' => new LiteralText('admin'),
+            'role' => new Literal('admin'),
         ]);
 
         $joined = new JoinedSession($primary, $secondary);
-        $fallback = new LiteralText('none');
+        $fallback = new Literal('none');
 
         // Role should come from primary ('admin')
         $this->assertSame('admin', $joined->value('role', $fallback)->string());

@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace PhpResponse\Text\Json;
 
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
-final class JsonTextTest extends TestCase
+final class JsonTest extends TestCase
 {
     public function testEscapesTextString(): void
     {
         $this->assertEquals(
             '"Hello \\"world\\"!"',
-            (new JsonText('Hello "world"!'))->string()
+            (new FromText('Hello "world"!'))->string()
         );
     }
 
@@ -21,7 +21,7 @@ final class JsonTextTest extends TestCase
     {
         $this->assertEquals(
             '"status":"ok"',
-            (new JsonMember('status', 'ok'))->string()
+            (new Member('status', 'ok'))->string()
         );
     }
 
@@ -29,9 +29,9 @@ final class JsonTextTest extends TestCase
     {
         $this->assertEquals(
             '{"status":"ok","code":200}',
-            (new JsonObject(
-                new JsonMember('status', 'ok'),
-                new JsonMember('code', new JsonNumber(200))
+            (new ObjectValue(
+                new Member('status', 'ok'),
+                new Member('code', new NumberValue(200))
             ))->string()
         );
     }
@@ -40,7 +40,7 @@ final class JsonTextTest extends TestCase
     {
         $this->assertEquals(
             '["first","second"]',
-            (new JsonArray('first', 'second'))->string()
+            (new ArrayValue('first', 'second'))->string()
         );
     }
 
@@ -48,30 +48,30 @@ final class JsonTextTest extends TestCase
     {
         $this->assertEquals(
             '{"data":{"items":["first","second"]}}',
-            (new JsonObject(
-                new JsonMember('data', new JsonObject(
-                    new JsonMember('items', new JsonArray('first', 'second'))
+            (new ObjectValue(
+                new Member('data', new ObjectValue(
+                    new Member('items', new ArrayValue('first', 'second'))
                 ))
             ))->string()
         );
     }
 
-    public function testJsonTrue(): void
+    public function testTrueValue(): void
     {
-        $this->assertEquals('true', (new JsonTrue())->string());
+        $this->assertEquals('true', (new TrueValue())->string());
     }
 
-    public function testJsonFalse(): void
+    public function testFalseValue(): void
     {
-        $this->assertEquals('false', (new JsonFalse())->string());
+        $this->assertEquals('false', (new FalseValue())->string());
     }
 
     public function testSerializesRawTextPayload(): void
     {
         $this->assertEquals(
             '{"settings":{"theme":"dark"}}',
-            (new JsonObject(
-                new JsonMember('settings', new LiteralText('{"theme":"dark"}'))
+            (new ObjectValue(
+                new Member('settings', new Literal('{"theme":"dark"}'))
             ))->string()
         );
     }

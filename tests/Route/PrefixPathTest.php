@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\Media\Fake;
 use PhpResponse\Response\StatusLine\Ok;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Text\StripPrefix;
 
 final class PrefixPathTest extends TestCase
@@ -17,9 +17,9 @@ final class PrefixPathTest extends TestCase
     {
         $media = (new PrefixPath(
             '/api/v1',
-            new Ok(new Body(new LiteralText('API V1 Target'))),
-            new Body(new LiteralText('Not Found')),
-            new LiteralText('/api/v1/users')
+            new Ok(new Body(new Literal('API V1 Target'))),
+            new Body(new Literal('Not Found')),
+            new Literal('/api/v1/users')
         ))->media(new Fake());
 
         /** @var Fake $media */
@@ -36,9 +36,9 @@ final class PrefixPathTest extends TestCase
     {
         $media = (new PrefixPath(
             '/api/v1',
-            new Ok(new Body(new LiteralText('API V1 Target'))),
-            new Body(new LiteralText('Prefix Fallback')),
-            new LiteralText('/web/home')
+            new Ok(new Body(new Literal('API V1 Target'))),
+            new Body(new Literal('Prefix Fallback')),
+            new Literal('/web/home')
         ))->media(new Fake());
 
         /** @var Fake $media */
@@ -52,18 +52,18 @@ final class PrefixPathTest extends TestCase
 
     public function testNestedPrefixRoutingWithStrippedPath(): void
     {
-        $fullPath = new LiteralText('/api/v1/users');
+        $fullPath = new Literal('/api/v1/users');
         $relative = new StripPrefix('/api/v1', $fullPath);
 
         $media = (new PrefixPath(
             '/api/v1',
             new ExactPath(
                 '/users',
-                new Ok(new Body(new LiteralText('Users List'))),
-                new Body(new LiteralText('Sub-route Not Found')),
+                new Ok(new Body(new Literal('Users List'))),
+                new Body(new Literal('Sub-route Not Found')),
                 $relative
             ),
-            new Body(new LiteralText('Prefix Not Found')),
+            new Body(new Literal('Prefix Not Found')),
             $fullPath
         ))->media(new Fake());
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Log;
 
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Log\Level\InfoLevel;
 use PhpResponse\Log\Level\ErrorLevel;
 use PhpResponse\Log\Level\WarningLevel;
@@ -17,7 +17,7 @@ final class LogTest extends TestCase
         $buffer = new MemoryBuffer();
         $log = new BufferLog($buffer);
 
-        $log->write(new PlainEntry(new InfoLevel(), new LiteralText('something happened')));
+        $log->write(new PlainEntry(new InfoLevel(), new Literal('something happened')));
 
         $this->assertCount(1, $buffer->entries());
         $this->assertSame('INFO: something happened', $buffer->entries()[0]);
@@ -29,7 +29,7 @@ final class LogTest extends TestCase
         $this->assertNotFalse($stream);
         
         $log = new StreamLog($stream);
-        $log->write(new PlainEntry(new InfoLevel(), new LiteralText('something happened')));
+        $log->write(new PlainEntry(new InfoLevel(), new Literal('something happened')));
 
         fseek($stream, 0);
         $content = stream_get_contents($stream);
@@ -48,7 +48,7 @@ final class LogTest extends TestCase
             new BufferLog($buffer2)
         );
 
-        $log->write(new PlainEntry(new ErrorLevel(), new LiteralText('critical issue')));
+        $log->write(new PlainEntry(new ErrorLevel(), new Literal('critical issue')));
 
         $this->assertCount(1, $buffer1);
         $this->assertCount(1, $buffer2);
@@ -62,7 +62,7 @@ final class LogTest extends TestCase
         $log = new BufferLog($buffer);
 
         $text = new LoggedText(
-            new LiteralText('hello oop'),
+            new Literal('hello oop'),
             $log
         );
 
@@ -77,7 +77,7 @@ final class LogTest extends TestCase
         $epoch->method('string')->willReturn('2026-07-17T12:00:00Z');
 
         $entry = new TimestampedEntry(
-            new PlainEntry(new InfoLevel(), new LiteralText('test message')),
+            new PlainEntry(new InfoLevel(), new Literal('test message')),
             $epoch
         );
 
@@ -88,7 +88,7 @@ final class LogTest extends TestCase
     public function testJsonEntryFormatsAsJson(): void
     {
         $entry = new JsonEntry(
-            new PlainEntry(new InfoLevel(), new LiteralText('test message'))
+            new PlainEntry(new InfoLevel(), new Literal('test message'))
         );
 
         $this->assertSame('INFO', $entry->level()->string());
@@ -101,7 +101,7 @@ final class LogTest extends TestCase
         $failingLog->method('write')->willThrowException(new \RuntimeException('Disk full'));
 
         $log = new FailsafeLog($failingLog);
-        $log->write(new PlainEntry(new ErrorLevel(), new LiteralText('failed task')));
+        $log->write(new PlainEntry(new ErrorLevel(), new Literal('failed task')));
 
         $this->assertTrue(true);
     }
@@ -111,8 +111,8 @@ final class LogTest extends TestCase
         $buffer = new \ArrayObject();
         $log = new LevelLog(new BufferLog($buffer), new ErrorLevel(), new WarningLevel());
 
-        $log->write(new PlainEntry(new InfoLevel(), new LiteralText('ignored')));
-        $log->write(new PlainEntry(new ErrorLevel(), new LiteralText('logged')));
+        $log->write(new PlainEntry(new InfoLevel(), new Literal('ignored')));
+        $log->write(new PlainEntry(new ErrorLevel(), new Literal('logged')));
 
         $this->assertCount(1, $buffer);
         $this->assertSame('ERROR: logged', $buffer[0]);
@@ -123,8 +123,8 @@ final class LogTest extends TestCase
         $path = tempnam(sys_get_temp_dir(), 'log_test');
         $this->assertNotFalse($path);
         
-        $log = new FileLog(new LiteralText($path));
-        $log->write(new PlainEntry(new InfoLevel(), new LiteralText('test file logging')));
+        $log = new FileLog(new Literal($path));
+        $log->write(new PlainEntry(new InfoLevel(), new Literal('test file logging')));
 
         $content = file_get_contents($path);
         unlink($path);
@@ -136,7 +136,7 @@ final class LogTest extends TestCase
     {
         $log = new ConsoleLog();
         ob_start();
-        $log->write(new PlainEntry(new InfoLevel(), new LiteralText('test console logging')));
+        $log->write(new PlainEntry(new InfoLevel(), new Literal('test console logging')));
         $content = ob_get_clean();
         
         $this->assertTrue(true);

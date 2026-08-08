@@ -6,7 +6,7 @@ namespace PhpResponse\Text\Json;
 
 use PhpResponse\Text;
 
-final class JsonString implements Json
+final class SubTree implements Json
 {
     private Text $origin;
     private string $key;
@@ -20,9 +20,9 @@ final class JsonString implements Json
     public function string(): string 
     {
         $data = json_decode($this->origin->string(), true, 512, JSON_THROW_ON_ERROR);
-        if (!isset($data[$this->key]) || !is_string($data[$this->key])) {
-            throw new \DomainException("Bad Request: '{$this->key}' is not a string.");
+        if (!isset($data[$this->key]) || !is_array($data[$this->key])) {
+            throw new \InvalidArgumentException("Bad Request: '{$this->key}' is missing or not a node.");
         }
-        return $data[$this->key];
+        return json_encode($data[$this->key], JSON_THROW_ON_ERROR);
     }
 }

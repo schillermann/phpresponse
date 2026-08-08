@@ -18,28 +18,28 @@ use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Header;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\Media\Wire;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Route\Method;
 use PhpResponse\Route\RegexPath;
 use PhpResponse\Route\ExactPath;
 
 // Define a 404 Not Found response
 $notFound = new Header(
-    new Body(new LiteralText("Page not found")),
+    new Body(new Literal("Page not found")),
     "Content-Type", "text/plain"
 );
 
 (new Method("GET",
     new ExactPath("/",
-        new Ok(new Header(new Body(new LiteralText("Welcome to the Home page")), "Content-Type", "text/plain")),
+        new Ok(new Header(new Body(new Literal("Welcome to the Home page")), "Content-Type", "text/plain")),
         new RegexPath("#^/users/(?<id>\d+)$#",
-            new Ok(new Header(new Body(new LiteralText("User details page")), "Content-Type", "text/plain")),
+            new Ok(new Header(new Body(new Literal("User details page")), "Content-Type", "text/plain")),
             $notFound
         )
     ),
     new Method("POST",
         new ExactPath("/submit",
-            new Ok(new Header(new Body(new LiteralText("Form submitted successfully")), "Content-Type", "text/plain")),
+            new Ok(new Header(new Body(new Literal("Form submitted successfully")), "Content-Type", "text/plain")),
             $notFound
         ),
         $notFound

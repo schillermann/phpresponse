@@ -6,7 +6,7 @@ namespace PhpResponse\Request;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use RuntimeException;
 
 final class RequestParsingTest extends TestCase
@@ -82,7 +82,7 @@ final class RequestParsingTest extends TestCase
 
         try {
             $file = new RequestFile('avatar');
-            $file->saveTo(new LiteralText($tmpTarget));
+            $file->saveTo(new Literal($tmpTarget));
 
             $this->assertFileExists($tmpTarget);
             $this->assertEquals('uploaded content', file_get_contents($tmpTarget));
@@ -113,7 +113,7 @@ final class RequestParsingTest extends TestCase
 
         try {
             $file = new RequestFile('document');
-            $file->saveTo(new LiteralText($tmpTarget));
+            $file->saveTo(new Literal($tmpTarget));
 
             $this->assertFileExists($tmpTarget);
             $this->assertEquals('nested upload', file_get_contents($tmpTarget));
@@ -135,7 +135,7 @@ final class RequestParsingTest extends TestCase
         $file = new RequestFile('missing_key');
 
         $this->expectException(RuntimeException::class);
-        $file->saveTo(new LiteralText('/tmp/dummy'));
+        $file->saveTo(new Literal('/tmp/dummy'));
     }
 
     public function testRequestFileThrowsExceptionOnUploadError(): void
@@ -151,6 +151,6 @@ final class RequestParsingTest extends TestCase
         $file = new RequestFile('avatar');
 
         $this->expectException(RuntimeException::class);
-        $file->saveTo(new LiteralText('/tmp/dummy'));
+        $file->saveTo(new Literal('/tmp/dummy'));
     }
 }

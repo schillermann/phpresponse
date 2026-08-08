@@ -7,7 +7,7 @@ namespace PhpResponse\Text;
 use PhpResponse\Text;
 use PhpResponse\Number;
 
-final class TextOfNumber implements Text {
+final class OfNumber implements Text {
     
     private Number $number;
 

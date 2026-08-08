@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Response;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class Body implements Response
 {
@@ -13,7 +13,7 @@ final class Body implements Response
 
     public function __construct(Text|string $content)
     {
-        $this->content = is_string($content) ? new LiteralText($content) : $content;
+        $this->content = is_string($content) ? new Literal($content) : $content;
     }
 
     public function media(Media $media): Media

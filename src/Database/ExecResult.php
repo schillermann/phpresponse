@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Database;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 /**
  * @deprecated Use PhpResponse\Database\AffectedRows instead.
@@ -14,7 +14,7 @@ final class ExecResult implements QueryResult
 {
     private AffectedRows $origin;
 
-    public function __construct(int $affectedRows = 0, Text $payload = new LiteralText(""))
+    public function __construct(int $affectedRows = 0, Text $payload = new Literal(""))
     {
         $this->origin = new AffectedRows($affectedRows, $payload);
     }

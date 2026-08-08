@@ -6,7 +6,7 @@ namespace PhpResponse\Text;
 
 use PhpResponse\Text;
 
-final class StickyText implements Text
+final class Sticky implements Text
 {
     private Text $origin;
     private string $cached;

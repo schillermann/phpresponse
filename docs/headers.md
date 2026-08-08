@@ -28,10 +28,10 @@ The following status line decorators are available under the `PhpResponse\Respon
 
 use PhpResponse\Response\Body;
 use PhpResponse\Response\StatusLine\NotFound;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $response = new NotFound(
-    new Body(new LiteralText("The requested resource was not found on this server."))
+    new Body(new Literal("The requested resource was not found on this server."))
 );
 ```
 
@@ -58,8 +58,8 @@ use PhpResponse\Response\Body;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Header\Header;
 use PhpResponse\Response\Header\Json;
-use PhpResponse\Text\Json\JsonObject;
-use PhpResponse\Text\Json\JsonMember;
+use PhpResponse\Text\Json\ObjectValue;
+use PhpResponse\Text\Json\Member;
 
 // Attach a custom header
 $customResponse = new Header(
@@ -71,8 +71,8 @@ $customResponse = new Header(
 $jsonResponse = new Json(
     new Ok(
         new Body(
-            new JsonObject(
-                new JsonMember("status", "ok")
+            new ObjectValue(
+                new Member("status", "ok")
             )
         )
     )
@@ -133,13 +133,13 @@ The following autonomous redirect classes are available under the `PhpResponse\R
 
 use PhpResponse\Response\Redirect\Found;
 use PhpResponse\Response\Redirect\MovedPermanently;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 // Found redirect (302 Found)
-$redirect = new Found(new LiteralText("/dashboard"));
+$redirect = new Found(new Literal("/dashboard"));
 
 // Permanent redirect (301 Moved Permanently)
-$permanentRedirect = new MovedPermanently(new LiteralText("/new-location"));
+$permanentRedirect = new MovedPermanently(new Literal("/new-location"));
 ```
 
 ---

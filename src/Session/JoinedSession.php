@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Session;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class JoinedSession implements Session
 {
@@ -20,7 +20,7 @@ final class JoinedSession implements Session
 
     public function value(Text|string $key, Text $default): Text
     {
-        $fallback = new LiteralText("__NOT_FOUND__");
+        $fallback = new Literal("__NOT_FOUND__");
         $val = $this->primary->value($key, $fallback);
         if ($val->string() !== "__NOT_FOUND__") {
             return $val;

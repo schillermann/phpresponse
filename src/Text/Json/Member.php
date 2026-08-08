@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpResponse\Text\Json;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
-final class JsonMember implements Text
+final class Member implements Text
 {
     private string $key;
     private Text $value;
@@ -15,7 +15,7 @@ final class JsonMember implements Text
     public function __construct(string $key, Json|Text|string $value)
     {
         $this->key = $key;
-        $this->value = is_string($value) ? new JsonText(new LiteralText($value)) : $value;
+        $this->value = is_string($value) ? new FromText(new Literal($value)) : $value;
     }
 
     public function string(): string

@@ -26,11 +26,11 @@ use PhpResponse\Response\Body;
 use PhpResponse\Response\Header;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Media\Wire;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 (new Ok(
     new Header(
-        new Body(new LiteralText("<h1>Hello from PhpResponse!</h1>")),
+        new Body(new Literal("<h1>Hello from PhpResponse!</h1>")),
         "Content-Type", "text/html"
     )
 ))->media(new Wire());
@@ -43,7 +43,7 @@ use PhpResponse\Text\LiteralText;
 Detailed topics are split into separate files for easy overview:
 
 - **[Authentication & CSRF](docs/authentication.md)**: Covers authentication checkpoints (`Checkpoint`), stateless passports (`Pass`, `Cookie`, `Header`, `Bearer`), identity management (`Identity`), and CSRF guard decorators (`GuardedResponse`, `CsrfToken`).
-- **[Caching](docs/caching.md)**: Covers caching results for performance using the `StickyText` decorator.
+- **[Caching](docs/caching.md)**: Covers caching results for performance using the `Sticky` decorator.
 - **[Database](docs/database.md)**: Covers database integration (`Database`, `Statement`, `Outcome`, `PdoDatabase`, `Fake`) and transaction boundary decorators (`TransactionalResponse`, `SqlTransaction`, `SqliteTransaction`, `PdoTransaction`).
 - **[Headers](docs/headers.md)**: Covers HTTP status codes, response headers, redirects, and specialized content-type headers.
 - **[JSON](docs/json.md)**: Covers parsing incoming JSON requests and declaratively building JSON responses.

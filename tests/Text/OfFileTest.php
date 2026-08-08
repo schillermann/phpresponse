@@ -6,7 +6,7 @@ namespace PhpResponse\Text;
 
 use PHPUnit\Framework\TestCase;
 
-final class TextOfFileTest extends TestCase
+final class OfFileTest extends TestCase
 {
     public function testReadsFileContent(): void
     {
@@ -14,7 +14,7 @@ final class TextOfFileTest extends TestCase
         file_put_contents($path, 'hello world from file');
 
         try {
-            $this->assertEquals('hello world from file', (new TextOfFile($path))->string());
+            $this->assertEquals('hello world from file', (new OfFile($path))->string());
         } finally {
             if (file_exists($path)) {
                 unlink($path);
@@ -25,6 +25,6 @@ final class TextOfFileTest extends TestCase
     public function testThrowsExceptionWhenFileNotFound(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        (new TextOfFile('non-existent-file.html'))->string();
+        (new OfFile('non-existent-file.html'))->string();
     }
 }

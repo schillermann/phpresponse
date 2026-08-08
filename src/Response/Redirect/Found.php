@@ -7,7 +7,7 @@ namespace PhpResponse\Response\Redirect;
 use PhpResponse\Response\Response;
 use PhpResponse\Response\Media;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class Found implements Response
 {
@@ -15,7 +15,7 @@ final class Found implements Response
 
     public function __construct(Text|string $target)
     {
-        $this->target = is_string($target) ? new LiteralText($target) : $target;
+        $this->target = is_string($target) ? new Literal($target) : $target;
     }
 
     public function media(Media $media): Media

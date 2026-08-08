@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Log;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class JsonEntry implements LogEntry
 {
@@ -23,7 +23,7 @@ final class JsonEntry implements LogEntry
 
     public function message(): Text
     {
-        return new LiteralText(
+        return new Literal(
             (string) json_encode([
                 'level' => $this->origin->level()->string(),
                 'message' => $this->origin->message()->string()

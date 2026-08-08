@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace PhpResponse\Database;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class AffectedRows implements Outcome
 {
     private int $affectedRows;
     private Text $payload;
 
-    public function __construct(int $affectedRows = 0, Text $payload = new LiteralText(""))
+    public function __construct(int $affectedRows = 0, Text $payload = new Literal(""))
     {
         $this->affectedRows = $affectedRows;
         $this->payload = $payload;

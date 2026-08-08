@@ -6,7 +6,7 @@ namespace PhpResponse\Request;
 
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class PathParamTest extends TestCase
 {
@@ -15,7 +15,7 @@ final class PathParamTest extends TestCase
         $param = new PathParam(
             '#^/users/(?<id>\d+)$#',
             'id',
-            new LiteralText('/users/42')
+            new Literal('/users/42')
         );
 
         $this->assertEquals('42', $param->string());
@@ -26,7 +26,7 @@ final class PathParamTest extends TestCase
         $param = new PathParam(
             '#^/orders/(\d+)/items/(\w+)$#',
             2,
-            new LiteralText('/orders/101/items/book')
+            new Literal('/orders/101/items/book')
         );
 
         $this->assertEquals('book', $param->string());
@@ -37,7 +37,7 @@ final class PathParamTest extends TestCase
         $param = new PathParam(
             '#^/users/(?<id>\d+)$#',
             'id',
-            new LiteralText('/users/abc')
+            new Literal('/users/abc')
         );
 
         $this->expectException(OutOfBoundsException::class);
@@ -49,7 +49,7 @@ final class PathParamTest extends TestCase
         $param = new PathParam(
             '#^/users/(\d+)$#',
             'missing_group',
-            new LiteralText('/users/42')
+            new Literal('/users/42')
         );
 
         $this->expectException(OutOfBoundsException::class);

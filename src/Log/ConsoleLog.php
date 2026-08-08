@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpResponse\Log;
 
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class ConsoleLog implements Log
 {
@@ -12,7 +12,7 @@ final class ConsoleLog implements Log
 
     public function __construct()
     {
-        $this->origin = new FileLog(new LiteralText('php://stdout'));
+        $this->origin = new FileLog(new Literal('php://stdout'));
     }
 
     public function write(LogEntry $entry): void

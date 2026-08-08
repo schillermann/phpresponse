@@ -12,12 +12,12 @@ final class TemplateVariableTest extends TestCase
     {
         $rendered = new TemplateVariable(
             new TemplateVariable(
-                new LiteralText('Hello, ${name}! You are ${age} years old.'),
+                new Literal('Hello, ${name}! You are ${age} years old.'),
                 'name',
-                new LiteralText('Yegor')
+                new Literal('Yegor')
             ),
             'age',
-            new LiteralText('40')
+            new Literal('40')
         );
 
         $this->assertEquals('Hello, Yegor! You are 40 years old.', $rendered->string());

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Auth\Csrf;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Request\Header;
 use PhpResponse\Request\FormParam;
 
@@ -20,7 +20,7 @@ final class RequestCandidate implements Text
             new Header('X-XSRF-Token'),
             new FormParam('csrf_token'),
             new FormParam('_token'),
-            new LiteralText('')
+            new Literal('')
         );
     }
 

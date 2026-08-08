@@ -8,7 +8,7 @@ use PhpResponse\Log\ExceptionEntry;
 use PhpResponse\Log\Log;
 use PhpResponse\Response\Header\Header;
 use PhpResponse\Response\StatusLine\InternalServerError;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use Throwable;
 
 final class FailsafeResponse implements Response
@@ -30,7 +30,7 @@ final class FailsafeResponse implements Response
             $this->log->write(new ExceptionEntry($ex));
             return (new InternalServerError(
                 new Header(
-                    new Body(new LiteralText("Something went wrong.")),
+                    new Body(new Literal("Something went wrong.")),
                     "Content-Type",
                     "text/plain"
                 )

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpResponse\Text\Json;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
-final class JsonArray implements Json
+final class ArrayValue implements Json
 {
     /** @var array<Text> */
     private array $items;
@@ -15,7 +15,7 @@ final class JsonArray implements Json
     public function __construct(Json|Text|string ...$items)
     {
         $this->items = array_map(
-            fn($item) => is_string($item) ? new JsonText(new LiteralText($item)) : $item,
+            fn($item) => is_string($item) ? new FromText(new Literal($item)) : $item,
             $items
         );
     }

@@ -6,7 +6,7 @@ namespace PhpResponse\Database;
 
 use ArrayObject;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 /**
  * @deprecated Use PhpResponse\Database\Fake instead.
@@ -17,7 +17,7 @@ final class MemoryDatabase implements Database
 
     public function __construct(
         ArrayObject $log = new ArrayObject(),
-        Text $dataset = new LiteralText("[]")
+        Text $dataset = new Literal("[]")
     ) {
         $this->origin = new Fake($log, $dataset);
     }

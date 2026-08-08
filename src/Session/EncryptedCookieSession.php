@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Session;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class EncryptedCookieSession implements Session
 {
@@ -20,8 +20,8 @@ final class EncryptedCookieSession implements Session
      */
     public function __construct(Text|string $cookieName, Text|string $secretKey, array $payload = [])
     {
-        $this->cookieName = is_string($cookieName) ? new LiteralText($cookieName) : $cookieName;
-        $this->secretKey = is_string($secretKey) ? new LiteralText($secretKey) : $secretKey;
+        $this->cookieName = is_string($cookieName) ? new Literal($cookieName) : $cookieName;
+        $this->secretKey = is_string($secretKey) ? new Literal($secretKey) : $secretKey;
         $this->payload = $payload;
     }
 
@@ -32,7 +32,7 @@ final class EncryptedCookieSession implements Session
             return $default;
         }
 
-        return new LiteralText($this->payload[$name]);
+        return new Literal($this->payload[$name]);
     }
 
     public function with(Text|string $key, Text $value): Session

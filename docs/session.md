@@ -22,22 +22,22 @@ In `PhpResponse`, session values are read using `value(key, default)`. If the ke
 
 ```php
 use PhpResponse\Session\ArraySession;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 // Initialize session with initial data known at request time
 $session = new ArraySession([
-    'user_id' => new LiteralText('42'),
-    'role'    => new LiteralText('admin')
+    'user_id' => new Literal('42'),
+    'role'    => new Literal('admin')
 ]);
 
-$fallback = new LiteralText('guest');
+$fallback = new Literal('guest');
 
-// Reads 'user_id' -> returns LiteralText('42')
+// Reads 'user_id' -> returns Literal('42')
 $userId = $session->value('user_id', $fallback);
 echo $userId->string(); // "42"
 
-// Reads missing key -> returns fallback LiteralText('guest')
-$theme = $session->value('theme', new LiteralText('light'));
+// Reads missing key -> returns fallback Literal('guest')
+$theme = $session->value('theme', new Literal('light'));
 echo $theme->string(); // "light"
 ```
 
@@ -51,7 +51,7 @@ Sessions are **100% immutable**. Calling `with()` spawns a brand-new instance of
 $initialSession = new ArraySession();
 
 // Spawns a new Session instance with 'role' set to 'admin'
-$updatedSession = $initialSession->with('role', new LiteralText('admin'));
+$updatedSession = $initialSession->with('role', new Literal('admin'));
 
 // $initialSession remains unchanged
 ```
@@ -65,14 +65,14 @@ To avoid method chaining (`->with()->with()->with()`), compose multiple sessions
 ```php
 use PhpResponse\Session\JoinedSession;
 use PhpResponse\Session\ArraySession;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 // Combine new session entries with an existing session in 1 single object instantiation
 $session = new JoinedSession(
     new ArraySession([
-        'user_id' => new LiteralText('42'),
-        'role'    => new LiteralText('admin'),
-        'theme'   => new LiteralText('dark')
+        'user_id' => new Literal('42'),
+        'role'    => new Literal('admin'),
+        'theme'   => new Literal('dark')
     ]),
     $existingSession
 );
@@ -88,11 +88,11 @@ For production environments, session state can be stored in encrypted, tamper-pr
 
 ```php
 use PhpResponse\Session\EncryptedCookieSession;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $session = new EncryptedCookieSession(
-    new LiteralText('app_session'),
-    new LiteralText('your-secret-encryption-key'),
+    new Literal('app_session'),
+    new Literal('your-secret-encryption-key'),
     $payloadFromCookie
 );
 ```

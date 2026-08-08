@@ -12,7 +12,7 @@ final class StripPrefixTest extends TestCase
     {
         $stripped = new StripPrefix(
             '/api/v1',
-            new LiteralText('/api/v1/users/42')
+            new Literal('/api/v1/users/42')
         );
 
         $this->assertEquals('/users/42', $stripped->string());
@@ -22,7 +22,7 @@ final class StripPrefixTest extends TestCase
     {
         $stripped = new StripPrefix(
             '/api/v1',
-            new LiteralText('/web/dashboard')
+            new Literal('/web/dashboard')
         );
 
         $this->assertEquals('/web/dashboard', $stripped->string());

@@ -6,7 +6,7 @@ namespace PhpResponse\Text;
 
 use PhpResponse\Text;
 
-final class FallbackText implements Text {
+final class Fallback implements Text {
     
     private Text $origin;
     private Text $fallback;

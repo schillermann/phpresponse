@@ -54,9 +54,9 @@ final class LoggedRegistration implements Registration
         $this->log->write(
             new PlainEntry(
                 new InfoLevel(),
-                new FormattedText(
-                    new LiteralText("User registered: %s"),
-                    new LiteralText($username)
+                new Formatted(
+                    new Literal("User registered: %s"),
+                    new Literal($username)
                 )
             )
         );
@@ -89,8 +89,8 @@ use PhpResponse\Response\Header;
 use PhpResponse\Response\Body as ResponseBody;
 use PhpResponse\Response\Media\Media;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\FormattedText;
+use PhpResponse\Text\Literal;
+use PhpResponse\Text\Formatted;
 
 final class RegistrationResponse implements Response
 {
@@ -112,8 +112,8 @@ final class RegistrationResponse implements Response
         return (new Ok(
             new Header(
                 new ResponseBody(
-                    new FormattedText(
-                        new LiteralText("User '%s' registered successfully!"),
+                    new Formatted(
+                        new Literal("User '%s' registered successfully!"),
                         $this->username
                     )
                 ),
@@ -134,11 +134,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 use PhpResponse\Response\Header;
 use PhpResponse\Response\Body as ResponseBody;
 use PhpResponse\Response\Media\Wire;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Route\Method;
 use PhpResponse\Route\ExactPath;
 use PhpResponse\Request\Body as RequestBody;
-use PhpResponse\Text\Json\JsonString;
+use PhpResponse\Text\Json\StringValue;
 use PhpResponse\Log\FileLog;
 use PhpResponse\Text\ProjectPath;
 
@@ -150,7 +150,7 @@ $registration = new LoggedRegistration(
 
 // 2. Define fallback response
 $notFound = new Header(
-    new ResponseBody(new LiteralText("Not Found")),
+    new ResponseBody(new Literal("Not Found")),
     "Content-Type", "text/plain"
 );
 
@@ -160,7 +160,7 @@ $notFound = new Header(
     new ExactPath("/register",
         new RegistrationResponse(
             $registration,
-            new JsonString(new RequestBody(), "username")
+            new StringValue(new RequestBody(), "username")
         ),
         $notFound
     ),
@@ -177,10 +177,10 @@ use PhpResponse\Log\PlainEntry;
 use PhpResponse\Log\TimestampedEntry;
 use PhpResponse\Log\UtcEpoch;
 use PhpResponse\Log\Level\InfoLevel;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $timestamped = new TimestampedEntry(
-    new PlainEntry(new InfoLevel(), new LiteralText('Action triggered')),
+    new PlainEntry(new InfoLevel(), new Literal('Action triggered')),
     new UtcEpoch()
 );
 ```
@@ -195,10 +195,10 @@ Serialize log entry metadata (level and message) into a JSON string:
 use PhpResponse\Log\PlainEntry;
 use PhpResponse\Log\JsonEntry;
 use PhpResponse\Log\Level\ErrorLevel;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $jsonEntry = new JsonEntry(
-    new PlainEntry(new ErrorLevel(), new LiteralText('Database down'))
+    new PlainEntry(new ErrorLevel(), new Literal('Database down'))
 );
 ```
 
@@ -232,12 +232,12 @@ use PhpResponse\Log\MemoryBuffer;
 use PhpResponse\Log\BufferLog;
 use PhpResponse\Log\PlainEntry;
 use PhpResponse\Log\Level\InfoLevel;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $buffer = new MemoryBuffer();
 $log = new BufferLog($buffer);
 
-$log->write(new PlainEntry(new InfoLevel(), new LiteralText('Action completed')));
+$log->write(new PlainEntry(new InfoLevel(), new Literal('Action completed')));
 
 // Inspect stored log string entries
 foreach ($buffer->entries() as $entryString) {
@@ -267,7 +267,7 @@ use PhpResponse\Log\PlainEntry;
 use PhpResponse\Log\Level\ErrorLevel;
 use PhpResponse\Log\Level\WarningLevel;
 use PhpResponse\Text\ProjectPath;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 // Setup a failsafe, level-filtered log writing to both console and file
 $log = new FailsafeLog(
@@ -282,5 +282,5 @@ $log = new FailsafeLog(
 );
 
 // This entry will be written to stdout and app.log
-$log->write(new PlainEntry(new ErrorLevel(), new LiteralText('Disk almost full')));
+$log->write(new PlainEntry(new ErrorLevel(), new Literal('Disk almost full')));
 ```

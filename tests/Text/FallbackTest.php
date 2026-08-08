@@ -7,13 +7,13 @@ namespace PhpResponse\Text;
 use PHPUnit\Framework\TestCase;
 use PhpResponse\Text;
 
-final class FallbackTextTest extends TestCase
+final class FallbackTest extends TestCase
 {
     public function testReturnsOriginWhenSuccessful(): void
     {
-        $text = new FallbackText(
-            new LiteralText('success'),
-            new LiteralText('fallback')
+        $text = new Fallback(
+            new Literal('success'),
+            new Literal('fallback')
         );
 
         $this->assertEquals('success', $text->string());
@@ -27,9 +27,9 @@ final class FallbackTextTest extends TestCase
             }
         };
 
-        $text = new FallbackText(
+        $text = new Fallback(
             $origin,
-            new LiteralText('fallback')
+            new Literal('fallback')
         );
 
         $this->assertEquals('fallback', $text->string());
@@ -43,9 +43,9 @@ final class FallbackTextTest extends TestCase
             }
         };
 
-        $text = new FallbackText(
+        $text = new Fallback(
             $origin,
-            new LiteralText('fallback'),
+            new Literal('fallback'),
             \RuntimeException::class
         );
 

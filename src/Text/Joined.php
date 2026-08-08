@@ -6,7 +6,7 @@ namespace PhpResponse\Text;
 
 use PhpResponse\Text;
 
-final class JoinedText implements Text
+final class Joined implements Text
 {
     private Text $separator;
 

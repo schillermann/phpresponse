@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpResponse\Log;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\FormattedText;
+use PhpResponse\Text\Literal;
+use PhpResponse\Text\Formatted;
 use PhpResponse\Log\Level\DebugLevel;
 
 final class LoggedText implements Text
@@ -26,9 +26,9 @@ final class LoggedText implements Text
         $this->log->write(
             new PlainEntry(
                 new DebugLevel(),
-                new FormattedText(
-                    new LiteralText("Evaluated text: '%s'"),
-                    new LiteralText($result)
+                new Formatted(
+                    new Literal("Evaluated text: '%s'"),
+                    new Literal($result)
                 )
             )
         );

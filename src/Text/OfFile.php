@@ -6,7 +6,7 @@ namespace PhpResponse\Text;
 
 use PhpResponse\Text;
 
-final class TextOfFile implements Text {
+final class OfFile implements Text {
     
     private string $path;
 

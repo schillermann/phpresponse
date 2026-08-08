@@ -7,7 +7,7 @@ namespace PhpResponse\Text;
 use PHPUnit\Framework\TestCase;
 use PhpResponse\Text;
 
-final class StickyTextTest extends TestCase
+final class StickyTest extends TestCase
 {
     public function testCachesOriginValue(): void
     {
@@ -16,7 +16,7 @@ final class StickyTextTest extends TestCase
             ->method('string')
             ->willReturn('hello');
 
-        $sticky = new StickyText($origin);
+        $sticky = new Sticky($origin);
 
         $this->assertSame('hello', $sticky->string());
         $this->assertSame('hello', $sticky->string());

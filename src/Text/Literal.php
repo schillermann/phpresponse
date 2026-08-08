@@ -6,7 +6,7 @@ namespace PhpResponse\Text;
 
 use PhpResponse\Text;
 
-final class LiteralText implements Text {
+final class Literal implements Text {
     private string $text;
 
     public function __construct(string $text) {

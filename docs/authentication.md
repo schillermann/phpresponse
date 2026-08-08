@@ -22,12 +22,12 @@ use PhpResponse\Auth\Csrf\RequestCandidate;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\StatusLine\Forbidden;
 use PhpResponse\Response\Body;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $guardedRoute = new GuardedResponse(
-    new Ok(new Body(new LiteralText("Resource updated successfully."))),
-    new SameToken(new LiteralText("expected-session-csrf-secret")),
-    new Forbidden(new Body(new LiteralText("CSRF verification failed."))),
+    new Ok(new Body(new Literal("Resource updated successfully."))),
+    new SameToken(new Literal("expected-session-csrf-secret")),
+    new Forbidden(new Body(new Literal("CSRF verification failed."))),
     new RequestCandidate() // Automatically inspects X-CSRF-Token, X-XSRF-Token, csrf_token, _token
 );
 ```
@@ -65,11 +65,11 @@ use PhpResponse\Auth\Pass\IdentityAuthentication;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\StatusLine\Unauthorized;
 use PhpResponse\Response\Body;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $protectedDashboard = new Checkpoint(
-    new Ok(new Body(new LiteralText("Welcome to the Admin Panel"))),
-    new Unauthorized(new Body(new LiteralText("Please log in"))),
+    new Ok(new Body(new Literal("Welcome to the Admin Panel"))),
+    new Unauthorized(new Body(new Literal("Please log in"))),
     new IdentityAuthentication(
         new Bearer("Authorization")
     )
@@ -120,21 +120,21 @@ use PhpResponse\Response\StatusLine\Forbidden;
 use PhpResponse\Response\StatusLine\Unauthorized;
 use PhpResponse\Response\StatusLine\NotFound;
 use PhpResponse\Response\Body;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 $app = new ExactPath(
     "/user/settings",
     new Checkpoint(
         new GuardedResponse(
-            new Ok(new Body(new LiteralText("Settings updated."))),
-            new SameToken(new LiteralText("secret-csrf-token")),
-            new Forbidden(new Body(new LiteralText("403 Forbidden")))
+            new Ok(new Body(new Literal("Settings updated."))),
+            new SameToken(new Literal("secret-csrf-token")),
+            new Forbidden(new Body(new Literal("403 Forbidden")))
         ),
-        new Unauthorized(new Body(new LiteralText("401 Unauthorized"))),
+        new Unauthorized(new Body(new Literal("401 Unauthorized"))),
         new IdentityAuthentication(
             new Cookie("auth_user")
         )
     ),
-    new NotFound(new Body(new LiteralText("404 Not Found")))
+    new NotFound(new Body(new Literal("404 Not Found")))
 );
 ```

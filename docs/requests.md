@@ -31,9 +31,9 @@ You can compose form fields and cookies declaratively, decorating missing inputs
 <?php
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\FallbackText;
-use PhpResponse\Text\FormattedText;
+use PhpResponse\Text\Literal;
+use PhpResponse\Text\Fallback;
+use PhpResponse\Text\Formatted;
 use PhpResponse\Request\FormParam;
 use PhpResponse\Request\Cookie;
 
@@ -42,11 +42,11 @@ final class UserFormPayload implements Text
     private Text $payload;
 
     public function __construct(
-        Text $username = new FallbackText(new FormParam("username"), new LiteralText("Guest")),
-        Text $sessionToken = new FallbackText(new Cookie("session_id"), new LiteralText("anonymous"))
+        Text $username = new Fallback(new FormParam("username"), new Literal("Guest")),
+        Text $sessionToken = new Fallback(new Cookie("session_id"), new Literal("anonymous"))
     ) {
-        $this->payload = new FormattedText(
-            new LiteralText("User: %s, Session: %s"),
+        $this->payload = new Formatted(
+            new Literal("User: %s, Session: %s"),
             $username,
             $sessionToken
         );
@@ -68,11 +68,11 @@ File uploads are handled by objects implementing `File`. Instead of querying arr
 
 use PhpResponse\Request\RequestFile;
 use PhpResponse\Request\File;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 // Saves the uploaded file associated with input name "avatar"
 $file = new RequestFile("avatar");
-$file->saveTo(new LiteralText("/var/www/uploads/avatar.png"));
+$file->saveTo(new Literal("/var/www/uploads/avatar.png"));
 ```
 
 ---
@@ -85,8 +85,8 @@ You can compose request parsing declaratively by encapsulating request attribute
 <?php
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\FallbackText;
+use PhpResponse\Text\Literal;
+use PhpResponse\Text\Fallback;
 use PhpResponse\Request\Header;
 use PhpResponse\Request\Method;
 use PhpResponse\Request\Path;
@@ -99,7 +99,7 @@ final class RequestDetailsText implements Text
     private Text $template;
 
     public function __construct(
-        Text $agent = new FallbackText(new Header("User-Agent"), new LiteralText("Unknown")),
+        Text $agent = new Fallback(new Header("User-Agent"), new Literal("Unknown")),
         Text $proto = new Protocol(),
         Text $method = new Method(),
         Text $path = new Path(),
@@ -110,7 +110,7 @@ final class RequestDetailsText implements Text
                 new TemplateVariable(
                     new TemplateVariable(
                         new TemplateVariable(
-                            new LiteralText("<html><body><h1>Browser: ${agent}</h1><p>Protocol: ${proto}</p><p>Method: ${method}</p><p>Path: ${path}</p><p>Body: ${body}</p></body></html>"),
+                            new Literal("<html><body><h1>Browser: ${agent}</h1><p>Protocol: ${proto}</p><p>Method: ${method}</p><p>Path: ${path}</p><p>Body: ${body}</p></body></html>"),
                             "agent", $agent
                         ),
                         "proto", $proto

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace PhpResponse\Response;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 use PHPUnit\Framework\TestCase;
 use PhpResponse\Response\Body;
@@ -31,7 +31,7 @@ final class ResponseTest extends TestCase
     {
         $media = (new Ok(
             new Header(
-                new Body(new LiteralText("Hello!")),
+                new Body(new Literal("Hello!")),
                 "X-Custom", "Value"
             )
         ))->media(new Fake());
@@ -62,7 +62,7 @@ final class ResponseTest extends TestCase
 
     public function testCreated(): void
     {
-        $media = (new Created(new Body(new LiteralText("Created!"))))->media(new Fake());
+        $media = (new Created(new Body(new Literal("Created!"))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 201 Created",
@@ -74,7 +74,7 @@ final class ResponseTest extends TestCase
 
     public function testNoContent(): void
     {
-        $media = (new NoContent(new Body(new LiteralText(""))))->media(new Fake());
+        $media = (new NoContent(new Body(new Literal(""))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 204 No Content",
@@ -86,7 +86,7 @@ final class ResponseTest extends TestCase
 
     public function testBadRequest(): void
     {
-        $media = (new BadRequest(new Body(new LiteralText("Bad Request!"))))->media(new Fake());
+        $media = (new BadRequest(new Body(new Literal("Bad Request!"))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 400 Bad Request",
@@ -98,7 +98,7 @@ final class ResponseTest extends TestCase
 
     public function testUnauthorized(): void
     {
-        $media = (new Unauthorized(new Body(new LiteralText("Unauthorized!"))))->media(new Fake());
+        $media = (new Unauthorized(new Body(new Literal("Unauthorized!"))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 401 Unauthorized",
@@ -110,7 +110,7 @@ final class ResponseTest extends TestCase
 
     public function testForbidden(): void
     {
-        $media = (new Forbidden(new Body(new LiteralText("Forbidden!"))))->media(new Fake());
+        $media = (new Forbidden(new Body(new Literal("Forbidden!"))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 403 Forbidden",
@@ -122,7 +122,7 @@ final class ResponseTest extends TestCase
 
     public function testNotFound(): void
     {
-        $media = (new NotFound(new Body(new LiteralText("Not Found!"))))->media(new Fake());
+        $media = (new NotFound(new Body(new Literal("Not Found!"))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 404 Not Found",
@@ -134,7 +134,7 @@ final class ResponseTest extends TestCase
 
     public function testMethodNotAllowed(): void
     {
-        $media = (new MethodNotAllowed(new Body(new LiteralText("Method Not Allowed!"))))->media(new Fake());
+        $media = (new MethodNotAllowed(new Body(new Literal("Method Not Allowed!"))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 405 Method Not Allowed",
@@ -146,7 +146,7 @@ final class ResponseTest extends TestCase
 
     public function testInternalServerError(): void
     {
-        $media = (new InternalServerError(new Body(new LiteralText("Internal Server Error!"))))->media(new Fake());
+        $media = (new InternalServerError(new Body(new Literal("Internal Server Error!"))))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 500 Internal Server Error",
@@ -158,7 +158,7 @@ final class ResponseTest extends TestCase
 
     public function testFoundRedirect(): void
     {
-        $media = (new Found(new LiteralText("/target")))->media(new Fake());
+        $media = (new Found(new Literal("/target")))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 302 Found",
@@ -170,7 +170,7 @@ final class ResponseTest extends TestCase
 
     public function testMovedPermanentlyRedirect(): void
     {
-        $media = (new MovedPermanently(new LiteralText("/target-new")))->media(new Fake());
+        $media = (new MovedPermanently(new Literal("/target-new")))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 301 Moved Permanently",
@@ -182,7 +182,7 @@ final class ResponseTest extends TestCase
 
     public function testSeeOtherRedirect(): void
     {
-        $media = (new SeeOther(new LiteralText("/see-other")))->media(new Fake());
+        $media = (new SeeOther(new Literal("/see-other")))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 303 See Other",
@@ -194,7 +194,7 @@ final class ResponseTest extends TestCase
 
     public function testTemporaryRedirect(): void
     {
-        $media = (new TemporaryRedirect(new LiteralText("/temp")))->media(new Fake());
+        $media = (new TemporaryRedirect(new Literal("/temp")))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 307 Temporary Redirect",
@@ -206,7 +206,7 @@ final class ResponseTest extends TestCase
 
     public function testPermanentRedirect(): void
     {
-        $media = (new PermanentRedirect(new LiteralText("/perm")))->media(new Fake());
+        $media = (new PermanentRedirect(new Literal("/perm")))->media(new Fake());
         $this->assertEquals(
             [
                 "status: 308 Permanent Redirect",
@@ -231,7 +231,7 @@ final class ResponseTest extends TestCase
     public function testJson(): void
     {
         $media = (new Json(
-            new Ok(new Body(new LiteralText('{"abc":123}')))
+            new Ok(new Body(new Literal('{"abc":123}')))
         ))->media(new Fake());
         $this->assertEquals(
             [

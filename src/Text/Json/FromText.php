@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace PhpResponse\Text\Json;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
-final class JsonText implements Json
+final class FromText implements Json
 {
     private Text $origin;
 
     public function __construct(Text|string $origin)
     {
-        $this->origin = is_string($origin) ? new LiteralText($origin) : $origin;
+        $this->origin = is_string($origin) ? new Literal($origin) : $origin;
     }
 
     public function string(): string

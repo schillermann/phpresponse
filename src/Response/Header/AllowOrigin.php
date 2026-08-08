@@ -7,13 +7,13 @@ namespace PhpResponse\Response\Header;
 use PhpResponse\Response\Response;
 use PhpResponse\Response\Media;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class AllowOrigin implements Response
 {
     private Response $origin;
 
-    public function __construct(Response $origin, Text $allowOrigin = new LiteralText('*'))
+    public function __construct(Response $origin, Text $allowOrigin = new Literal('*'))
     {
         $this->origin = new Header($origin, 'Access-Control-Allow-Origin', $allowOrigin);
     }

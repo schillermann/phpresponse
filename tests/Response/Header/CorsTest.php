@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use PhpResponse\Response\Header\Cors;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Body;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Response\Media\Fake;
 
 final class CorsTest extends TestCase
@@ -16,7 +16,7 @@ final class CorsTest extends TestCase
     public function testDefaultCorsHeaders(): void
     {
         $response = new Cors(
-            new Ok(new Body(new LiteralText("CORS Content")))
+            new Ok(new Body(new Literal("CORS Content")))
         );
 
         $media = $response->media(new Fake());
@@ -37,10 +37,10 @@ final class CorsTest extends TestCase
     public function testCustomCorsHeaders(): void
     {
         $response = new Cors(
-            new Ok(new Body(new LiteralText("Custom CORS"))),
-            new LiteralText("https://example.com"),
-            new LiteralText("X-Custom-Header"),
-            new LiteralText("GET, POST")
+            new Ok(new Body(new Literal("Custom CORS"))),
+            new Literal("https://example.com"),
+            new Literal("X-Custom-Header"),
+            new Literal("GET, POST")
         );
 
         $media = $response->media(new Fake());

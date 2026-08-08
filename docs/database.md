@@ -154,7 +154,7 @@ use PhpResponse\Response\StatusLine\Created;
 use PhpResponse\Response\TransactionalResponse;
 use PhpResponse\Response\FailsafeResponse;
 use PhpResponse\Log\ConsoleLog;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 // 1. Instantiate infrastructure
 $db = new Fake();
@@ -174,13 +174,13 @@ $userResponse = new class($users) implements Response {
     public function media(Media $media): Media {
         // Delegate to domain object (Returns User entity, explicit noun phrase createdUser)
         $user = $this->users->createdUser(
-            new LiteralText("Bob"),
-            new LiteralText("bob@example.com")
+            new Literal("Bob"),
+            new Literal("bob@example.com")
         );
 
         return (new Created(
             new Header(
-                new Body(new LiteralText('{"status":"user created"}')),
+                new Body(new Literal('{"status":"user created"}')),
                 'Content-Type',
                 'application/json'
             )

@@ -7,7 +7,7 @@ namespace PhpResponse\Text;
 use PHPUnit\Framework\TestCase;
 use PhpResponse\Number;
 
-final class TextOfNumberTest extends TestCase
+final class OfNumberTest extends TestCase
 {
     public function testConvertsNumberToText(): void
     {
@@ -17,6 +17,6 @@ final class TextOfNumberTest extends TestCase
             }
         };
 
-        $this->assertEquals("42", (new TextOfNumber($number))->string());
+        $this->assertEquals("42", (new OfNumber($number))->string());
     }
 }

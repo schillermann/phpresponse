@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Route;
 
 use PHPUnit\Framework\TestCase;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Response\Body;
 use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Media\Fake;
@@ -18,12 +18,12 @@ final class RoutingTest extends TestCase
             "GET",
             new RegexPath(
                 "#^/home$#",
-                new Ok(new Body(new LiteralText("Home page"))),
-                new Body(new LiteralText("Unreached Path Fallback")),
-                new LiteralText("/home")
+                new Ok(new Body(new Literal("Home page"))),
+                new Body(new Literal("Unreached Path Fallback")),
+                new Literal("/home")
             ),
-            new Body(new LiteralText("Method Fallback")),
-            new LiteralText("GET")
+            new Body(new Literal("Method Fallback")),
+            new Literal("GET")
         ))->media(new Fake());
 
         /** @var Fake $media */
@@ -42,12 +42,12 @@ final class RoutingTest extends TestCase
             "GET",
             new ExactPath(
                 "/about",
-                new Ok(new Body(new LiteralText("About page"))),
-                new Body(new LiteralText("404")),
-                new LiteralText("/about")
+                new Ok(new Body(new Literal("About page"))),
+                new Body(new Literal("404")),
+                new Literal("/about")
             ),
-            new Body(new LiteralText("Method Fallback")),
-            new LiteralText("GET")
+            new Body(new Literal("Method Fallback")),
+            new Literal("GET")
         ))->media(new Fake());
 
         /** @var Fake $media */
@@ -66,12 +66,12 @@ final class RoutingTest extends TestCase
             "POST",
             new RegexPath(
                 "#^/home$#",
-                new Ok(new Body(new LiteralText("Home"))),
-                new Body(new LiteralText("Regex Fallback")),
-                new LiteralText("/home")
+                new Ok(new Body(new Literal("Home"))),
+                new Body(new Literal("Regex Fallback")),
+                new Literal("/home")
             ),
-            new Body(new LiteralText("Method Fallback")),
-            new LiteralText("GET")
+            new Body(new Literal("Method Fallback")),
+            new Literal("GET")
         ))->media(new Fake());
 
         /** @var Fake $media */

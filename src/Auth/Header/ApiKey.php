@@ -6,7 +6,7 @@ namespace PhpResponse\Auth\Header;
 
 use PhpResponse\Auth\Authentication;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Request\Header;
 
 final class ApiKey implements Authentication
@@ -16,7 +16,7 @@ final class ApiKey implements Authentication
 
     public function __construct(Text|string $expected, Text|string $header = 'X-Api-Key')
     {
-        $this->expected = is_string($expected) ? new LiteralText($expected) : $expected;
+        $this->expected = is_string($expected) ? new Literal($expected) : $expected;
         $this->header = is_string($header) ? new Header($header) : $header;
     }
 

@@ -6,7 +6,7 @@ namespace PhpResponse\Text;
 
 use PhpResponse\Text;
 
-final class FormattedText implements Text {
+final class Formatted implements Text {
     
     private Text $template;
     

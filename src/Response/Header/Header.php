@@ -7,7 +7,7 @@ namespace PhpResponse\Response\Header;
 use PhpResponse\Response\Response;
 use PhpResponse\Response\Media;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class Header implements Response
 {
@@ -18,8 +18,8 @@ final class Header implements Response
     public function __construct(Response $origin, Text|string $name, Text|string $value)
     {
         $this->origin = $origin;
-        $this->name = is_string($name) ? new LiteralText($name) : $name;
-        $this->value = is_string($value) ? new LiteralText($value) : $value;
+        $this->name = is_string($name) ? new Literal($name) : $name;
+        $this->value = is_string($value) ? new Literal($value) : $value;
     }
 
     public function media(Media $media): Media

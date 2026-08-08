@@ -1,6 +1,6 @@
 # Templating
 
-This section covers how to render views and templates using decorators like `TemplateVariable`, `TextOfFile`, and `TextOfNumber` in `PhpResponse`.
+This section covers how to render views and templates using decorators like `TemplateVariable`, `OfFile`, and `OfNumber` in `PhpResponse`.
 
 ---
 
@@ -9,8 +9,8 @@ This section covers how to render views and templates using decorators like `Tem
 `PhpResponse` provides several classes to compile templates dynamically:
 
 - **`PhpResponse\Text\TemplateVariable`**: Decorator that replaces `${name}` placeholders in a template string with the string representation of another `Text` object.
-- **`PhpResponse\Text\TextOfFile`**: Reads raw content from an external file (e.g., HTML template files).
-- **`PhpResponse\Text\TextOfNumber`**: Converts a `Number` object to a `Text` object.
+- **`PhpResponse\Text\OfFile`**: Reads raw content from an external file (e.g., HTML template files).
+- **`PhpResponse\Text\OfNumber`**: Converts a `Number` object to a `Text` object.
 
 ---
 
@@ -24,8 +24,8 @@ If you want to render a response using an in-memory template string, define your
 use PhpResponse\Text;
 use PhpResponse\Number;
 use PhpResponse\Text\TemplateVariable;
-use PhpResponse\Text\LiteralText;
-use PhpResponse\Text\TextOfNumber;
+use PhpResponse\Text\Literal;
+use PhpResponse\Text\OfNumber;
 
 final class UserWelcomeText implements Text {
     private Text $name;
@@ -39,12 +39,12 @@ final class UserWelcomeText implements Text {
     public function string(): string {
         return (new TemplateVariable(
             new TemplateVariable(
-                new LiteralText("<html><body><h1>Hello, ${name}!</h1><p>You are ${age} years old.</p></body></html>"),
+                new Literal("<html><body><h1>Hello, ${name}!</h1><p>You are ${age} years old.</p></body></html>"),
                 "name",
                 $this->name
             ),
             "age",
-            new TextOfNumber($this->age)
+            new OfNumber($this->age)
         ))->string();
     }
 }
@@ -62,20 +62,20 @@ use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Header;
 use PhpResponse\Response\Body as ResponseBody;
 use PhpResponse\Response\Media\Wire;
-use PhpResponse\Text\Json\JsonSubTree;
-use PhpResponse\Text\Json\JsonString;
+use PhpResponse\Text\Json\SubTree;
+use PhpResponse\Text\Json\StringValue;
 use PhpResponse\JsonInt;
 
 (new Ok(
     new Header(
         new ResponseBody(
             new UserWelcomeText(
-                new JsonString(
-                    new JsonSubTree(new Body(), 'user'),
+                new StringValue(
+                    new SubTree(new Body(), 'user'),
                     'name'
                 ),
                 new JsonInt(
-                    new JsonSubTree(new Body(), 'user'),
+                    new SubTree(new Body(), 'user'),
                     'age'
                 )
             )
@@ -97,7 +97,7 @@ If you have multiple template variables, nesting them can become deeply indented
 use PhpResponse\Text;
 use PhpResponse\Number;
 use PhpResponse\Text\TemplateVariable;
-use PhpResponse\Text\TextOfNumber;
+use PhpResponse\Text\OfNumber;
 
 final class UserProfileText implements Text {
     private Text $template;
@@ -118,13 +118,13 @@ final class UserProfileText implements Text {
                 $this->name
             ),
             "age",
-            new TextOfNumber($this->age)
+            new OfNumber($this->age)
         ))->string();
     }
 }
 ```
 
-Because `UserProfileText` implements the `Text` interface, it is fully compatible with the response decorator tree. You can pass it as a drop-in argument directly to `Body`, loading the template from an external HTML file using `TextOfFile`:
+Because `UserProfileText` implements the `Text` interface, it is fully compatible with the response decorator tree. You can pass it as a drop-in argument directly to `Body`, loading the template from an external HTML file using `OfFile`:
 
 ```php
 <?php
@@ -136,22 +136,22 @@ use PhpResponse\Response\StatusLine\Ok;
 use PhpResponse\Response\Header;
 use PhpResponse\Response\Body as ResponseBody;
 use PhpResponse\Response\Media\Wire;
-use PhpResponse\Text\Json\JsonSubTree;
-use PhpResponse\Text\Json\JsonString;
+use PhpResponse\Text\Json\SubTree;
+use PhpResponse\Text\Json\StringValue;
 use PhpResponse\JsonInt;
-use PhpResponse\Text\TextOfFile;
+use PhpResponse\Text\OfFile;
 
 (new Ok(
     new Header(
         new ResponseBody(
             new UserProfileText(
-                new TextOfFile("template.html"),
-                new JsonString(
-                    new JsonSubTree(new Body(), 'user'),
+                new OfFile("template.html"),
+                new StringValue(
+                    new SubTree(new Body(), 'user'),
                     'name'
                 ),
                 new JsonInt(
-                    new JsonSubTree(new Body(), 'user'),
+                    new SubTree(new Body(), 'user'),
                     'age'
                 )
             )

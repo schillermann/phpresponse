@@ -10,7 +10,7 @@ use PhpResponse\Response\StatusLine\Forbidden;
 use PhpResponse\Response\Header;
 use PhpResponse\Response\Body;
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PhpResponse\Request\Method;
 
 final class GuardedResponse implements Response
@@ -26,7 +26,7 @@ final class GuardedResponse implements Response
         CsrfToken $token,
         Response $fallback = new Forbidden(
             new Header(
-                new Body(new LiteralText("CSRF token verification failed.")),
+                new Body(new Literal("CSRF token verification failed.")),
                 "Content-Type",
                 "text/plain"
             )

@@ -6,7 +6,7 @@ namespace PhpResponse\Tests\Session;
 
 use PhpResponse\Session\ArraySession;
 use PhpResponse\Session\EncryptedCookieSession;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 use PHPUnit\Framework\TestCase;
 
 final class SessionTest extends TestCase
@@ -14,12 +14,12 @@ final class SessionTest extends TestCase
     public function testArraySessionStoresAndRetrievesImmutablyWithFallback(): void
     {
         $session = new ArraySession();
-        $key = new LiteralText('user_id');
-        $fallback = new LiteralText('guest');
+        $key = new Literal('user_id');
+        $fallback = new Literal('guest');
 
         $this->assertSame('guest', $session->value($key, $fallback)->string());
 
-        $updated = $session->with($key, new LiteralText('42'));
+        $updated = $session->with($key, new Literal('42'));
         $this->assertSame('guest', $session->value($key, $fallback)->string());
         $this->assertSame('42', $updated->value($key, $fallback)->string());
     }
@@ -27,15 +27,15 @@ final class SessionTest extends TestCase
     public function testEncryptedCookieSessionStoresImmutablyWithFallback(): void
     {
         $session = new EncryptedCookieSession(
-            new LiteralText('app_session'),
-            new LiteralText('secret123')
+            new Literal('app_session'),
+            new Literal('secret123')
         );
-        $key = new LiteralText('role');
-        $fallback = new LiteralText('guest');
+        $key = new Literal('role');
+        $fallback = new Literal('guest');
 
         $this->assertSame('guest', $session->value($key, $fallback)->string());
 
-        $updated = $session->with($key, new LiteralText('admin'));
+        $updated = $session->with($key, new Literal('admin'));
         $this->assertSame('guest', $session->value($key, $fallback)->string());
         $this->assertSame('admin', $updated->value($key, $fallback)->string());
     }

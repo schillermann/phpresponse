@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpResponse\Auth\Csrf;
 
 use PhpResponse\Text;
-use PhpResponse\Text\LiteralText;
+use PhpResponse\Text\Literal;
 
 final class SameToken implements CsrfToken
 {
@@ -13,7 +13,7 @@ final class SameToken implements CsrfToken
 
     public function __construct(Text|string $expected)
     {
-        $this->expected = is_string($expected) ? new LiteralText($expected) : $expected;
+        $this->expected = is_string($expected) ? new Literal($expected) : $expected;
     }
 
     public function string(): string
